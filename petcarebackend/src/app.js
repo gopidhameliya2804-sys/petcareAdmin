@@ -35,7 +35,7 @@ let Feedback = require("./routes/admin/feedback.route");
 //middleware
 app.use(express.json());
 app.use(cors({
-    origin:[ "http://localhost:5173" , "http://localhost:5174" , "http://localhost:3000" , "http://localhost:3001"],
+    origin:[ "https://petcareadmin.onrender.com"],
     methods: ["GET" , "POST" , "PUT" ,"DELETE"],
     credentials: true
 }))
