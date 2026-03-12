@@ -89,7 +89,7 @@ function App() {
   
   return (
     <>
-      <HashRouter>
+      <BrowserRouter>
         {/* <Header /> */}
         <Routes>
           <Route path='/' element={<ProtectPages><Index /></ProtectPages>}></Route>
@@ -175,7 +175,7 @@ function App() {
           <Route path='/edit-pet' element={<EditPet />}></Route>
           <Route path='*' element={<Error404 />}></Route>
         </Routes>
-      </HashRouter>
+      </BrowserRouter>
     </>
   )
 }
