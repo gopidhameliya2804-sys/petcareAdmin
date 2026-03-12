@@ -2,8 +2,10 @@ import React from "react";
 import { useState } from "react";
 import cookie from "js-cookie";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
+  const navigate = useNavigate();
   let [admin , setAdmin] = useState({
       email:"",
       password:"",
@@ -24,14 +26,14 @@ function Login() {
     try {
       let response = await axios.post("https://petcareadmin.onrender.com/api/auth/signin", admin);
       if (response.data.token != ""){
-        cookie.set("token", response.data.token);
+        localStorage.setItem("token", response.data.token);
 
         setAdmin({
           email:"",
           password:""
         })
         alert("Login Successful");
-        window.location.href = "/";
+        navigate("/");
       }  
     } catch (e) {
       setAdmin({
@@ -39,7 +41,7 @@ function Login() {
           password:""
         })
         alert(" Invlalid Details");
-        window.location.href = "/login";
+        navigate("/login");
     }
   }
   // console.log(admin);
