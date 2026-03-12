@@ -1,4 +1,5 @@
 import './App.css'
+import { HashRouter } from "react-router-dom";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Header from './common/Header';
 import Footer from './common/Footer';
@@ -87,7 +88,7 @@ function App() {
   
   return (
     <>
-      <BrowserRouter>
+      <HashRouter>
         {/* <Header /> */}
         <Routes>
           <Route path='/' element={<Index />}></Route>
@@ -173,7 +174,7 @@ function App() {
           <Route path='/edit-pet' element={<EditPet />}></Route>
           <Route path='*' element={<Error404 />}></Route>
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
     </>
   )
 }
