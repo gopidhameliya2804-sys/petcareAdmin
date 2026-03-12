@@ -26,6 +26,7 @@ function Login() {
     try {
       let response = await axios.post("https://petcareadmin.onrender.com/api/auth/signin", admin);
       console.log(response.data);
+      const token = response.data.token || response.data.data?.token;
       if (token) {
       cookie.set("token", token, { expires: 1 });
         setAdmin({
