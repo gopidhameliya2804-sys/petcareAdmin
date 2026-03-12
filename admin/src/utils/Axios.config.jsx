@@ -8,7 +8,7 @@ let api = axios.create({
 
 api.interceptors.request.use((config) => {
     let token = CheckToken();
-    config.headers.Authorization = `bearer ${token}`;
+    config.headers.Authorization = `Bearer ${token}`;
     return config;
 })
 
