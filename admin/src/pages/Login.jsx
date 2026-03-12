@@ -22,7 +22,7 @@ function Login() {
     e.preventDefault();
 
     try {
-      let response = await axios.post("http://localhost:8000/api/auth/signin", admin);
+      let response = await axios.post("https://petcareadmin.onrender.com/api/auth/signin", admin);
       if (response.data.token != ""){
         cookie.set("token", response.data.token);
 
