@@ -58,7 +58,6 @@ import Checkout from './pages/Checkout';
 import Error403 from './pages/Error403';
 import Error404 from './pages/Error404';
 import Error500 from './pages/Error500';
-import ProtectPages from './utils/ProtectPage';
 import ManageUsers from './pages/ManageUsers';
 import ManageServiceCategories from './pages/ManageServiceCategories';
 import ManageServices from './pages/ManageServices';
@@ -91,7 +90,7 @@ function App() {
       <BrowserRouter>
         {/* <Header /> */}
         <Routes>
-          <Route path='/' element={<ProtectPages><Index /></ProtectPages>}></Route>
+          <Route path='/' element={<Index />}></Route>
           <Route path='/alert' element={<Alert />}></Route>
           <Route path='/badge' element={<Badge />}></Route>
           <Route path='/breadcrumb' element={<Breadcrumb />}></Route>
