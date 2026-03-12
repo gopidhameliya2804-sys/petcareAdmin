@@ -79,6 +79,7 @@ import EditService from './pages/EditService';
 import EditPetCategory from './pages/EditPatCategory';
 import EditPet from './pages/EditPet';
 import BookingHistory from './pages/BookingHistory';
+import ProtectPages from './utils/ProtectPage';
 
 
 
@@ -91,7 +92,7 @@ function App() {
       <HashRouter>
         {/* <Header /> */}
         <Routes>
-          <Route path='/' element={<Index />}></Route>
+          <Route path='/' element={<ProtectPages><Index /></ProtectPages>}></Route>
           <Route path='/alert' element={<Alert />}></Route>
           <Route path='/badge' element={<Badge />}></Route>
           <Route path='/breadcrumb' element={<Breadcrumb />}></Route>
