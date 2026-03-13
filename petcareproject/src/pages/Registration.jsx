@@ -78,7 +78,7 @@ function Registration() {
     if (!validationForm()) return;
 
     try{
-      let response = await axios.post("http://localhost:8000/api/auth/signup", user);
+      let response = await axios.post("https://petcarebackend-wzcq.onrender.com/api/auth/signup", user);
       console.log(response.data);
 
       if(response.data.status){
