@@ -26,7 +26,7 @@ function Login() {
     try {
       let response = await axios.post("https://petcarebackend-wzcq.onrender.com/api/auth/signin", admin);
       console.log(response.data);
-      let token = response.data.data.token;
+      let token = response.data.token;
       if (token) {
       cookie.set("token",token , { expires: 1 });
         setAdmin({

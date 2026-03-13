@@ -1,6 +1,7 @@
 let express = require("express");
 let app = express();
 let cors = require("cors");
+const cookieParser = require("cookie-parser");
 
 // Common
 let AuthRoutes = require("./routes/auth.route");
@@ -33,6 +34,7 @@ let Payment = require("./routes/admin/payment.route");
 let Feedback = require("./routes/admin/feedback.route");
 
 //middleware
+app.use(cookieParser());
 app.use(express.json());
 app.use(cors({
     origin:[ "https://petcareadmin.onrender.com"],
