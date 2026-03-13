@@ -20,7 +20,7 @@ function Login() {
   }
 
 
-  async function hnadleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
 
     try {
@@ -70,7 +70,7 @@ function Login() {
             Log in with your data that you entered during registration.
           </p>
 
-          <form onSubmit={hnadleSubmit}>  
+          <form onSubmit={handleSubmit}>  
             <div className="form-group position-relative has-icon-left mb-4">
               <input
                type="email"
