@@ -13,7 +13,7 @@ function Index() {
     try{
       let response = await api.get("/admin/dashboard");
       setAdmin(response.data.user);
-      // console.log(response);
+      console.log(response.data);
       
     } catch (err) {
         if (err.response?.status === 401 || err.response?.status === 403) {
