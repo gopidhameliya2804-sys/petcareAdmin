@@ -26,7 +26,6 @@ import Booking from "./pages/Booking";
 import Payment from "./pages/Payment";
 import PetCategories from "./pages/Petcategories";
 import Pet from "./pages/Pet";
-import Feedback from "./pages/Feedback";
 import Inquiry from "./pages/Inquiry";
 import Reviews from "./pages/Review";
 import AdoptPets from "./pages/Adopt";
@@ -46,7 +45,7 @@ function App() {
       <BrowserRouter>
         <Header />
         <Routes>
-          <Route path="/" element={<Index />}></Route>
+          <Route path="/" element={<ProtectPages><Index /></ProtectPages>}></Route>
           <Route path="/service-category" element={<ServiceCategory />}></Route>
           <Route path="/services/:bycategoryid" element={<Services />}></Route>
           <Route path="/service-details" element={<ServiceDetails />}></Route>
