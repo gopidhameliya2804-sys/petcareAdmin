@@ -4,7 +4,7 @@ function Logout() {
   try {
     Cookies.remove("token");
     alert("Logout Successful");
-    window.location.href = "/";
+    window.location.href = "/pet-adoption";
   } catch (e) {
     console.log(e);
   }
