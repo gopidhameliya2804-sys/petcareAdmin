@@ -1,19 +1,19 @@
 import Cookies from "js-cookie";
 
-function Logout(navigate) {
+function Logout() {
   try {
     Cookies.remove("token");
     alert("Logout Successful");
-    navigate("/login");
+    window.location.href = "/login";
   } catch (e) {
     console.log(e);
   }
 }
 
-function LogoutWithoutNotification(navigate) {
+function LogoutWithoutNotification() {
   try {
     Cookies.remove("token");
-    navigate("/login");
+    window.location.href = "/login";
   } catch (e) {
     console.log(e);
   }

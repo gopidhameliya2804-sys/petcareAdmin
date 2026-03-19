@@ -264,7 +264,7 @@ function Header() {
                         <Link
                           className="btn-one"
                           onClick={() => {
-                            Logout(navigate);
+                            Logout();
                           }}
                         >
                           <span className="txt">Logout</span>
