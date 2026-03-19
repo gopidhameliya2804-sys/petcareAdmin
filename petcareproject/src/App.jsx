@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, HashRouter } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Footer from "./comman/Footer"
 import Header from "./comman/Header"
 import About from "./pages/About";
@@ -42,7 +42,7 @@ import ResetPassword from "./pages/ResetPassword";
 function App() {
   return (
     <>
-      <HashRouter>
+      <BrowserRouter>
         <Header />
         <Routes>
           <Route path="/" element={<ProtectPages><Index /></ProtectPages>}></Route>
@@ -87,7 +87,7 @@ function App() {
           <Route path="*" element={<NotFound />}></Route>
         </Routes>
         <Footer />
-      </HashRouter>
+      </BrowserRouter>
     </>
   )
 }
