@@ -1,16 +1,23 @@
 import Cookies from "js-cookie";
-import { useNavigate } from "react-router-dom";
 
-const AllLogout = () => {
-  const navigate = useNavigate();
-
-  const Logout = () => {
+function Logout(navigate) {
+  try {
     Cookies.remove("token");
     alert("Logout Successful");
     navigate("/login");
-  };
+  } catch (e) {
+    console.log(e);
+  }
+}
 
-  return <button onClick={Logout}>Logout</button>;
-};
+function LogoutWithoutNotification(navigate) {
+  try {
+    Cookies.remove("token");
+    navigate("/login");
+  } catch (e) {
+    console.log(e);
+  }
+}
 
-export default AllLogout;
+export default Logout;
+export { LogoutWithoutNotification };
