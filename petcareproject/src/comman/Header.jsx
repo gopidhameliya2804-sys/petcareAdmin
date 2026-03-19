@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import CheckToken from "../utils/CheckToken";
 import Logout from "../utils/Logout";
 
@@ -7,6 +7,7 @@ function Header() {
   let [token, setToken] = useState("");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     let token = CheckToken();
@@ -263,7 +264,7 @@ function Header() {
                         <Link
                           className="btn-one"
                           onClick={() => {
-                            Logout();
+                            Logout(navigate);
                           }}
                         >
                           <span className="txt">Logout</span>
