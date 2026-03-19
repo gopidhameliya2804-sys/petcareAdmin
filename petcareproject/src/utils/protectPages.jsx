@@ -5,7 +5,7 @@ const ProtectPages = ({ children }) => {
   const token = cookie.get("token");
 
   if (!token) {
-  return token ? <Outlet /> : <Navigate to="/login" replace />;
+    return <Navigate to="/login" />;
   }
 
   return children;
