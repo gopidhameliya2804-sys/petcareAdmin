@@ -5,6 +5,7 @@ import axios from "axios";
 import BreadCrumbs from "../comman/BreadCrumbs";
 
 function Login() {
+  let [loading , setLoading] = useState(false);
   let [user, setUser] = useState({
     email: "",
     password: "",
@@ -20,6 +21,7 @@ function Login() {
 
   async function handleSubmit(e) {
     e.preventDefault();
+    setLoading(true);
 
     try {
       let response = await axios.post(
@@ -43,6 +45,8 @@ function Login() {
       });
       alert(" Invlalid Details");
       window.location.href = "/login";
+    }finally {
+      setLoading(false);
     }
   }
 
@@ -130,7 +134,8 @@ function Login() {
                         <input
                           type="submit"
                           className="btn-one gradient-bg-1"
-                          value={"Login"}
+                          disabled={loading}
+                          value={loading ? "Wait for Loading..." : "Loading Now"}
                         />
                     
 
