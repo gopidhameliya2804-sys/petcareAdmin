@@ -36,8 +36,8 @@ function Login() {
           email: "",
           password: "",
         });
-        toast.success("Login Successful");
-        window.location.href = "/";
+        toast.success("Login Successful", {onClose:()=>{
+        window.location.href = "/";}});
       }
     } catch (e) {
       setUser({
