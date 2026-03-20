@@ -43,6 +43,7 @@ import ResetPassword from "./pages/ResetPassword";
 function App() {
   return (
     <>
+      <ToastContainer position="top-right" autoClose={3000} theme="colored" style={{ zIndex: 9999 }}/>  
       <BrowserRouter>
         <Header />
         <Routes>
@@ -102,7 +103,6 @@ function App() {
         </Routes>
         <Footer />
       </BrowserRouter>
-      <ToastContainer position="top-right" autoClose={3000} theme="colored" style={{ zIndex: 9999 }}/>
     </>
   );
 }
