@@ -44,8 +44,8 @@ function Login() {
         email: "",
         password: "",
       });
-      toast.error(" Invlalid Details");
-      window.location.href = "/login";
+      toast.error("Invlalid Details");
+      // window.location.href = "/login";
     }finally {
       setLoading(false);
     }
