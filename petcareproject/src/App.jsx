@@ -1,10 +1,10 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { ToastContainer } from 'react-toastify';
-import Footer from "./comman/Footer"
-import Header from "./comman/Header"
+import { ToastContainer } from "react-toastify";
+import Footer from "./comman/Footer";
+import Header from "./comman/Header";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
-import Index from "./pages/Index"
+import Index from "./pages/Index";
 import Petgrooming from "./pages/Petgrooming";
 import DogSetting from "./pages/DogSetting";
 import HealthyMeal from "./pages/HealthyMeal";
@@ -50,16 +50,26 @@ function App() {
           <Route path="/service-category" element={<ServiceCategory />}></Route>
           <Route path="/services/:bycategoryid" element={<Services />}></Route>
           <Route path="/service-details" element={<ServiceDetails />}></Route>
-          <Route path="/pet-categories"element={<PetCategories />}></Route>
+          <Route path="/pet-categories" element={<PetCategories />}></Route>
           <Route path="/pet/:bycategoryid" element={<Pet />}></Route>
           <Route path="/pet-details" element={<PetDetails />}></Route>
 
-          <Route path="/pet-adoption" element={<ProtectPages><PetAdoption /></ProtectPages>}></Route>
-          <Route path="/adoption-tracking" element={<AdoptionTracking />}></Route>
+          <Route
+            path="/pet-adoption"
+            element={
+              <ProtectPages>
+                <PetAdoption />
+              </ProtectPages>
+            }
+          ></Route>
+          <Route
+            path="/adoption-tracking"
+            element={<AdoptionTracking />}
+          ></Route>
           <Route path="/adopt" element={<AdoptPets />}></Route>
 
           <Route path="/booking" element={<Booking />}></Route>
-          <Route path="/booking-history" element={<BookingHistory />}></Route>  
+          <Route path="/booking-history" element={<BookingHistory />}></Route>
 
           <Route path="/payment" element={<Payment />}></Route>
           <Route path="/pet-feedback" element={<PetFeedback />}></Route>
@@ -81,17 +91,20 @@ function App() {
 
           <Route path="/registration" element={<Registration />}></Route>
           <Route path="/forgot-password" element={<ForgotPassword />}></Route>
-          <Route path="/reset-password/:token" element={<ResetPassword />}></Route>
+          <Route
+            path="/reset-password/:token"
+            element={<ResetPassword />}
+          ></Route>
           <Route path="/login" element={<Login />}></Route>
-          <Route path='/profile' element={<Profile />}></Route>
+          <Route path="/profile" element={<Profile />}></Route>
           <Route path="/edit-profile" element={<EditProfile />}></Route>
           <Route path="*" element={<NotFound />}></Route>
         </Routes>
         <Footer />
       </BrowserRouter>
-      <ToastContainer position="top-right" autoClose={3000} theme="colored"/>
+      <ToastContainer position="top-right" autoClose={3000} theme="colored" />
     </>
-  )
+  );
 }
 
-export default App
+export default App;
