@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { ToastContainer } from 'react-toastify';
 import Footer from "./comman/Footer"
 import Header from "./comman/Header"
 import About from "./pages/About";
@@ -88,6 +89,7 @@ function App() {
         </Routes>
         <Footer />
       </BrowserRouter>
+      <ToastContainer position="top-right" autoClose={8000} />
     </>
   )
 }

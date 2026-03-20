@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import cookie from "js-cookie";
 import axios from "axios";
+import { toast } from 'react-toastify';
 import BreadCrumbs from "../comman/BreadCrumbs";
 
 function Login() {
@@ -35,7 +36,7 @@ function Login() {
           email: "",
           password: "",
         });
-        alert("Login Successful");
+        toast.success("Login Successful");
         window.location.href = "/";
       }
     } catch (e) {
@@ -43,7 +44,7 @@ function Login() {
         email: "",
         password: "",
       });
-      alert(" Invlalid Details");
+      toast.error(" Invlalid Details");
       window.location.href = "/login";
     }finally {
       setLoading(false);
