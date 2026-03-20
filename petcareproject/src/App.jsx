@@ -45,7 +45,7 @@ function App() {
       <BrowserRouter>
         <Header />
         <Routes>
-          <Route path="/" element={<ProtectPages><Index /></ProtectPages>}></Route>
+          <Route path="/" element={<Index />}></Route>
           <Route path="/service-category" element={<ServiceCategory />}></Route>
           <Route path="/services/:bycategoryid" element={<Services />}></Route>
           <Route path="/service-details" element={<ServiceDetails />}></Route>
