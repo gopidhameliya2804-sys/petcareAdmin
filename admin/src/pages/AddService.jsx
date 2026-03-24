@@ -3,6 +3,7 @@ import Sidebar from "../common/Sidebar";
 import Footer from "../common/Footer";
 import api from "../utils/Axios.config";
 import cookie from "js-cookie";
+import { toast } from "react-toastify";
 
 function ServiceInput() {
   const [preview, setPreview] = useState(null);
@@ -68,7 +69,7 @@ function ServiceInput() {
         cookie.set("token", response.data.token);
       }
 
-      alert("Service Added Successfully");
+      toast.success("Service Added Successfully" , {onClose: () => {window.location.href = "/manage-services"}});
 
       setService({
         ser_cate_id: "",
@@ -79,11 +80,9 @@ function ServiceInput() {
         status: "Active",
         timestamp: new Date(),
       });
-
-      window.location.href = "/manage-services";
     } catch (err) {
       console.error(err);
-      alert("Failed to add service");
+      toast.error("Failed to add service");
     }
   };
 

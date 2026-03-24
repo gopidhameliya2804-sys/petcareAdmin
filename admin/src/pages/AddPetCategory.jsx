@@ -3,6 +3,7 @@ import Sidebar from "../common/Sidebar";
 import Footer from "../common/Footer";
 import api from "../utils/Axios.config";
 import cookie from "js-cookie";
+import { toast } from "react-toastify";
 
 function PetCategoryInput() {
   const [admin, setAdmin] = useState({});
@@ -44,17 +45,15 @@ function PetCategoryInput() {
       cookie.set("token", response.data.token);
     }
 
-    alert("Pet Category Added Successfully");
+    toast.success("Pet Category Added Successfully" ,{onClose: () => {window.location.href = "/manage-petcategory"}});
 
     setPetCategory({
       name: "",
       image: "",
     });
-
-    window.location.href = "/manage-petcategory";
     } catch (err) {
       console.error(err);
-      alert("Something went wrong");
+      toast.error("Something went wrong");
     }
   };
   console.log(petcategory);
