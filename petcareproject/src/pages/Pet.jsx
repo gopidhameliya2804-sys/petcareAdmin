@@ -4,6 +4,7 @@ import { useState } from "react";
 import api from "../utils/AxiosConfig";
 import { useEffect } from "react";
 import BreadCrumbs from "../comman/BreadCrumbs";
+import { useQuery } from "@tanstack/react-query";
 
 function Pet() {
   const { bycategoryid } = useParams();
@@ -23,10 +24,14 @@ function Pet() {
     }
   };
 
-  useEffect(() => {
-    FetchPet();
-  }, []);
-  console.log(pet);
+  // useEffect(() => {
+  //   FetchPet();
+  // }, []);
+
+  const { data:pets, isLoading, isError, error } = useQuery({
+    queryKey: ["pets"],
+    queryFn: FetchPet,
+  });
 
   return (
     <div>
