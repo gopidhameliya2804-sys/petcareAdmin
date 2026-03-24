@@ -9,11 +9,6 @@ import Petgrooming from "./pages/Petgrooming";
 import DogSetting from "./pages/DogSetting";
 import HealthyMeal from "./pages/HealthyMeal";
 import VeterinarySer from "./pages/VeterinarySer";
-import Blog from "./pages/Blog";
-import BlogGv from "./pages/BlogGv";
-import BlogDetails from "./pages/BlogDetails";
-import Shop from "./pages/Shop";
-import ProductDetails from "./pages/ProductDetails";
 import Faq from "./pages/Faq";
 import Team from "./pages/Team";
 import Registration from "./pages/Registration";
@@ -24,13 +19,11 @@ import ServiceCategory from "./pages/ServiceCategory";
 import Services from "./pages/Services";
 import ServiceDetails from "./pages/ServiceDetails";
 import Booking from "./pages/Booking";
-import Payment from "./pages/Payment";
 import PetCategories from "./pages/Petcategories";
 import Pet from "./pages/Pet";
 import Inquiry from "./pages/Inquiry";
 import Reviews from "./pages/Review";
 import AdoptPets from "./pages/Adopt";
-import AdoptionTracking from "./pages/AdoptionTracking";
 import NotFound from "./pages/NotFound";
 import PetDetails from "./pages/PetDetails";
 import PetAdoption from "./pages/PetAdoption";
@@ -63,16 +56,11 @@ function App() {
               </ProtectPages>
             }
           ></Route>
-          <Route
-            path="/adoption-tracking"
-            element={<AdoptionTracking />}
-          ></Route>
           <Route path="/adopt" element={<AdoptPets />}></Route>
 
           <Route path="/booking" element={<Booking />}></Route>
           <Route path="/booking-history" element={<BookingHistory />}></Route>
 
-          <Route path="/payment" element={<Payment />}></Route>
           <Route path="/pet-feedback" element={<PetFeedback />}></Route>
           <Route path="/inquiry" element={<Inquiry />}></Route>
           <Route path="/review" element={<Reviews />}></Route>
@@ -82,11 +70,6 @@ function App() {
           <Route path="/dogsetting" element={<DogSetting />}></Route>
           <Route path="/healthymeal" element={<HealthyMeal />}></Route>
           <Route path="/veterinaryService" element={<VeterinarySer />}></Route>
-          <Route path="/blog" element={<Blog />}></Route>
-          <Route path="/blog_gridview" element={<BlogGv />}></Route>
-          <Route path="/blogdetails" element={<BlogDetails />}></Route>
-          <Route path="/shop" element={<Shop />}></Route>
-          <Route path="/productdetails" element={<ProductDetails />}></Route>
           <Route path="/faq" element={<Faq />}></Route>
           <Route path="/team" element={<Team />}></Route>
 
