@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Sidebar from "../common/Sidebar";
 import { useNavigate } from "react-router-dom";
 import api from "../utils/Axios.config";
+import { toast } from "react-toastify";
 
 function BookingHistory() {
   const [bookings, setBookings] = useState([]);
@@ -24,11 +25,11 @@ function BookingHistory() {
   const DeleteBooking = async (id) => {
     try {
       let response = await api.delete(`/admin/booking/delete/${id}`);
-      alert("booking delete successfully");
+      toast.success("booking delete successfully");
       FetchBooking();
     } catch (e) {
       console.log(e);
-      alert("Something went wrong");
+      toast.error("Something went wrong");
     }
   };
 

@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Sidebar from "../common/Sidebar";
 import Footer from "../common/Footer";
 import api from "../utils/Axios.config";
+import { toast } from "react-toastify";
 
 function EditPetCategory() {
   const petCate = useLocation().state;
@@ -51,12 +52,12 @@ function EditPetCategory() {
       );
 
       if (response.status === 200) {
-        alert("Pet category updated successfully.");
+        toast.success("Pet category updated successfully.");
         navigate("/manage-petcategory");
       }
     } catch (error) {
       console.error(error);
-      alert("Failed to update pet category");
+      toast.error("Failed to update pet category");
     }
   };
 

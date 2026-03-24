@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Sidebar from "../common/Sidebar";
 import Footer from "../common/Footer";
 import api from "../utils/Axios.config";
+import { toast } from "react-toastify";
 
 function EditPet() {
   const [categories, setCategories] = useState([]);
@@ -65,14 +66,14 @@ function EditPet() {
         formData.append("image", pet.newImage);
       }
 
-      const response = await api.put(`/admin/pet/edit/${pet._id}`, formData);
+      const response = await api.put(`/admin/pet/edit/${pet.id}`, formData);
       if (response.status === 200) {
-        alert("Pet updated successfully");
+        toast.success("Pet updated successfully");
         navigate("/manage-pet");
       }
     } catch (err) {
       console.error(err);
-      alert("Failed to update pet");
+      toast.error("Failed to update pet");
     }
   };
 
