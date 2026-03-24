@@ -5,6 +5,7 @@ import "slick-carousel/slick/slick-theme.css";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from 'react-toastify';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { StrictMode } from 'react';
 
 const queryClient = new QueryClient();
 
