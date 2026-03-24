@@ -22,9 +22,10 @@ function PetCategories() {
     }
   };
 
-  useEffect(() => {
-    FetchPetCategory();
-  }, []);
+  const { data:petcategory, isLoading, isError, error } = useQuery({
+    queryKey: ["petcategory"],
+    queryFn: FetchPetCategory,
+  });
 
 
   return (
