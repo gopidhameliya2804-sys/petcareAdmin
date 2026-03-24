@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import api from "../utils/AxiosConfig";
 import BreadCrumbs from "../comman/BreadCrumbs";
+import { toast } from "react-toastify";
 
 function ResetPassword() {
   const { token } = useParams();
@@ -25,7 +26,7 @@ function ResetPassword() {
     e.preventDefault();
 
     if (passwordData.password !== passwordData.confimPassword) {
-        alert("Password do not Match");
+        toast.error("Password do not Match");
         return;
     }
 

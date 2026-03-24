@@ -89,8 +89,7 @@ function Registration() {
       if (response.data.status) {
         console.log(response.data.message);
 
-        toast.success("Signup Successful");
-        window.location.href = "/login";
+        toast.success("Signup Successful" , {onClick: () => {window.location.href = "/login"}});
       }
     } catch (e) {
       setUser({
@@ -99,8 +98,7 @@ function Registration() {
         phone: "",
         password: "",
       });
-      toast.error(" Invlalid Details");
-      window.location.href = "/registration";
+      toast.error(" Invlalid Details" , {onClick: () => { window.location.href = "/registration"}});
     } finally {
       setLoading(false);
     }

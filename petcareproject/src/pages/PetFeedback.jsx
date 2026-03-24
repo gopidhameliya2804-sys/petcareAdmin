@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import BreadCrumbs from "../comman/BreadCrumbs";
 import { useNavigate } from "react-router-dom";
 import api from "../utils/AxiosConfig";
+import { toast } from "react-toastify";
 
 function Feedback() {
   const navigate = useNavigate();
@@ -27,14 +28,14 @@ function Feedback() {
     e.preventDefault();
 
     if (feedback.rating === 0) {
-      alert("Please select a rating");
+      toast.error("Please select a rating");
       return;
     }
 
     try {
       setLoading(true);
       await api.post("/user/feedback/addfeedback", feedback);
-      alert("Thank you for your feedback!");
+      toast.success("Thank you for your feedback!" , {onClick: () => { navigate("/")}});
       setFeedback({
         rating: 0,
         name: "",
@@ -43,10 +44,9 @@ function Feedback() {
         user_id : profile._id,
         timestamp: new Date(),
       })
-      navigate("/");
     } catch (err) {
       console.error(err);
-      alert("Something went wrong");
+      toast.error("Something went wrong");
     } finally {
       setLoading(false);
     }

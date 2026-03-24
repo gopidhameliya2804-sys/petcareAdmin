@@ -10,8 +10,8 @@ function Profile() {
   async function FetchUserProfile() {
     try {
       let response = await api.get("/user/profile");
-      // console.log(response.data);
       setUserProfile(response.data.users);
+      // console.log(response.data);
     } catch (e) {
       console.log(e);
     }

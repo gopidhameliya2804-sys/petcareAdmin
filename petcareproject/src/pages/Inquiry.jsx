@@ -88,9 +88,9 @@ function Inquiry() {
               }`}
             >
               <p>Find help with UPI and card payments, invoices, refunds, failed transactions, and secure billing details for all pet care services in one place.</p>
-              <Link to="/payment" className=" btn-one mt-3">
+              {/* <Link to="/payment" className=" btn-one mt-3">
                 <span className="txt">Payment Help</span>
-              </Link>
+              </Link> */}
             </div>
           </div>
 

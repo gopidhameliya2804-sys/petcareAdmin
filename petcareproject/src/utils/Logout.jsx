@@ -1,9 +1,10 @@
 import Cookies from "js-cookie";
+import { toast } from "react-toastify";
 
 function Logout() {
   try {
     Cookies.remove("token");
-    alert("Logout Successful");
+    toast.success("Logout Successful");
     window.location.href = "/login";
   } catch (e) {
     console.log(e);

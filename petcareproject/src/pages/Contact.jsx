@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import BreadCrumbs from "../comman/BreadCrumbs";
 import api from "../utils/AxiosConfig";
+import { toast } from "react-toastify";
 
 function Contact() {
   const navigate = useNavigate();
@@ -29,7 +30,7 @@ function Contact() {
       let response = await api.post("/user/inquiry/addinquiry", inquiry);
       console.log(response.data);
       setInquiry(response.data.data);
-      alert("Inquiry submited successfully");
+      toast.success("Inquiry submited successfully" , {onClick: () => { navigate("/")}});
       setInquiry({
         name: "",
         email: "",
@@ -37,10 +38,9 @@ function Contact() {
         subject: "",
         message: "",
       });
-      navigate("/");
     } catch (e) {
       console.log(e);
-      alert("Something went wrong");
+      toast.error("Something went wrong");
     }
   };
 

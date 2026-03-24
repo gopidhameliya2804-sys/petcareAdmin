@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import BreadCrumbs from "../comman/BreadCrumbs";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import api from "../utils/AxiosConfig";
+import { toast } from "react-toastify";
 
 function PetAdoption() {
   const petadata = useLocation().state;
@@ -29,11 +30,10 @@ function PetAdoption() {
         ...petadopt,
       });
 
-      alert("Adoption request submitted successfully");
-      navigate("/adopt");
+      toast.success("Adoption request submitted successfully" , {onClick: () => { navigate("/adopt")}});
     } catch (e) {
       console.log(e);
-      alert("Something went wrong");
+      toast.error("Something went wrong");
     }
   };
   return (

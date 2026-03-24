@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import BreadCrumbs from "../comman/BreadCrumbs";
 import { useState } from "react";
 import api from "../utils/AxiosConfig";
+import { toast } from "react-toastify";
 
 function About() {
   const navigate = useNavigate();
@@ -17,10 +18,7 @@ function About() {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setInquiry((prev) => (
-      { ...prev, 
-      [name]: value 
-    }));
+    setInquiry((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
@@ -30,7 +28,11 @@ function About() {
       let response = await api.post("/user/inquiry/addinquiry", inquiry);
       console.log(response.data);
       setInquiry(response.data.data);
-      alert("Inquiry submited successfully");
+      toast.success("Inquiry submited successfully", {
+        onclose: () => {
+          navigate("/");
+        },
+      });
       setInquiry({
         name: "",
         email: "",
@@ -38,10 +40,9 @@ function About() {
         subject: "",
         message: "",
       });
-      navigate("/");
     } catch (e) {
       console.log(e);
-      alert("Something went wrong");
+      toast.error("Something went wrong");
     }
   };
 
@@ -50,7 +51,11 @@ function About() {
     <div>
       <div>
         {/*Start breadcrumb area*/}
-        <BreadCrumbs title1="About us" title2="About us" imageUrl="assets/images/breadcrumb/breadcrumb-1.png"></BreadCrumbs>
+        <BreadCrumbs
+          title1="About us"
+          title2="About us"
+          imageUrl="assets/images/breadcrumb/breadcrumb-1.png"
+        ></BreadCrumbs>
         {/*End breadcrumb area*/}
         {/*Start About Style2 Area*/}
         <section className="about-style2-area">
@@ -211,7 +216,9 @@ function About() {
                           </div>
                         </div>
                         <div className="title">
-                          <h2>Happy <br /> Pets</h2>
+                          <h2>
+                            Happy <br /> Pets
+                          </h2>
                           <p>Care with love & comfort</p>
                         </div>
                       </div>
@@ -411,7 +418,7 @@ function About() {
         </section>
         {/*End Fact Counter Area*/}
         {/*Start Contact Form Style1 Area*/}
-       <section className="contact-form-style1-area">
+        <section className="contact-form-style1-area">
           <div
             className="contact-form-style1-bg"
             style={{

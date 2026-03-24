@@ -3,6 +3,7 @@ import BreadCrumbs from "../comman/BreadCrumbs";
 import api from "../utils/AxiosConfig";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import { toast } from "react-toastify";
 
 function Booking() {
   const [pets, setPets] = useState([]);
@@ -68,7 +69,7 @@ function Booking() {
               amount,
             });
             console.log(responsive.data);
-            alert("Booking  Successfully");
+            toast.success("Booking  Successfully" , {onClick: () => { navigate("/booking-history")}});
             setBooking({
               ser_id: service._id,
               pet_id: "",
@@ -76,10 +77,9 @@ function Booking() {
               date: "",
               time: "",
             });
-            navigate("/booking-history");
           } catch (e) {
             console.log(e);
-            alert("Booking Failed");
+            toast.error("Booking Failed");
           }
         },
         prefill: {

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import BreadCrumbs from "../comman/BreadCrumbs";
 import api from "../utils/AxiosConfig";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 function EditProfile() {
   let userData = useLocation().state;
@@ -21,11 +22,10 @@ function EditProfile() {
     e.preventDefault();
     try {
       const response = await api.put(`/user/edit/${user._id}`, user);
-      alert("Profile Updated Successfully");
-      navigate("/profile")
+      toast.success("Profile Updated Successfully" , {onClick: () => { navigate("/profile")}});
     } catch (err) {
       console.log(err);
-      alert("Update Failed");
+      toast.error("Update Failed");
     }
   };
 
