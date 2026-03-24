@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Sidebar from "../common/Sidebar";
 import Footer from "../common/Footer";
 import api from "../utils/Axios.config";
+import { toast } from "react-toastify";
 
 function EditService() {
   const serviceData = useLocation().state;
@@ -74,12 +75,11 @@ function EditService() {
       );
 
       if (response.status === 200) {
-        alert("Service updated successfully");
-        navigate("/manage-services");
+        toast.success("Service updated successfully" , {onClose: () => {navigate("/manage-services")}});
       }
     } catch (err) {
       console.error(err);
-      alert("Failed to update service");
+      toast.error("Failed to update service");
     }
   };
 

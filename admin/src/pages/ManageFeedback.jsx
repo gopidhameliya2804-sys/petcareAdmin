@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Sidebar from "../common/Sidebar";
 import api from "../utils/Axios.config";
 import { useEffect } from "react";
+import { toast } from "react-toastify";
 
 function ManageFeedback() {
   const [ feedbacks , setFeedbacks] = useState([]);
@@ -23,7 +24,7 @@ function ManageFeedback() {
   const DeleteFeedback = async (id) => {
     try {
       let response = await api.delete(`/admin/feedback/delete/${id}`);
-      setFeedbacks(response.data.data);
+      toast.success("Feedback Delete Successfully.");
       FetchFeedback();
     } catch (e) {
       console.log(e);

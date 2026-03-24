@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Sidebar from "../common/Sidebar";
 import api from "../utils/Axios.config";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 function ManageServiceCategories() {
   const [serviceCategory, setServiceCategory] = useState([]);
@@ -24,7 +25,7 @@ function ManageServiceCategories() {
     try {
       let response = await api.delete(`/admin/servicecategory/delete/${id}`);
       if (response.status == 200) {
-        alert("Delete Service Category");
+        toast.success("Delete Service Category");
         FetchServiceCategory();
       }
     } catch (e) {

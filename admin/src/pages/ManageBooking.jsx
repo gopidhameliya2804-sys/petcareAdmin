@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Sidebar from "../common/Sidebar";
 import { useNavigate } from "react-router-dom";
 import api from "../utils/Axios.config";
+import { toast } from "react-toastify";
 
 function ManageBookings() {
   const [bookings, setBookings] = useState([]);
@@ -24,11 +25,11 @@ function ManageBookings() {
   const DeleteBooking = async (id) => {
     try {
       let response = await api.delete(`/admin/booking/delete/${id}`);
-      alert("booking delete successfully");
+      toast.success("booking delete successfully");
       FetchBooking();
     } catch (e) {
       console.log(e);
-      alert("Something went wrong");
+      // alert("Something went wrong");
     }
   };
 
@@ -37,11 +38,11 @@ function ManageBookings() {
     let response = await api.put(`/admin/booking/status/${id}`, {
       status: status,
     });
-    alert("Status updated successfully");
+    toast.success("Status updated successfully");
     FetchBooking();
   } catch (error) {
     console.log(error);
-    alert("Failed to update status");
+    toast.error("Failed to update status");
   }
 };
 

@@ -3,6 +3,7 @@ import Sidebar from "../common/Sidebar";
 import { useEffect } from "react";
 import api from "../utils/Axios.config";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 function ManagePets() {
   const [pet, setPet] = useState([]);
@@ -26,7 +27,7 @@ function ManagePets() {
     try {
       let response = await api.delete(`/admin/pet/delete/${id}`);
       if (response.status == 200) {
-        alert("Delete Pet");
+        toast.success("Delete Pet");
         FetchPet();
         navigate("/manage-pet")
       }

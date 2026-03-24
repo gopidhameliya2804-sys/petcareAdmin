@@ -3,6 +3,7 @@ import Sidebar from "../common/Sidebar";
 import api from "../utils/Axios.config";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import { toast } from "react-toastify";
 
 function ManageInquiry() {
   const [inquiries, setInquiries] = useState([]);
@@ -26,7 +27,7 @@ function ManageInquiry() {
   const DeleteInquiry = async (id) => {
     try {
       let response =  await api.delete(`/admin/inquiry/delete/${id}`);
-      alert("Delete Inquiry successfully");
+      toast.success("Delete Inquiry successfully");
       FetchInquiry();
     } catch (e) {
       console.log(e);

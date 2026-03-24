@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Sidebar from "../common/Sidebar";
 import api from "../utils/Axios.config";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 function ManagePetCategories() {
   const [petcategory, setPetCategory] = useState([]);
@@ -25,7 +26,7 @@ function ManagePetCategories() {
     try {
       let response = await api.delete(`/admin/petcategory/delete/${id}`);
       if (response.status == 200) {
-        alert("Delete Pet Category");
+        toast.success("Delete Pet Category");
         FetchPetCategory();
       }
     } catch (e) {

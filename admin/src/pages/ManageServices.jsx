@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Sidebar from "../common/Sidebar";
 import api from "../utils/Axios.config";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 function ManageServices() {
   let [service, setService] = useState([]);
@@ -25,7 +26,7 @@ function ManageServices() {
     try {
       let response = await api.delete(`/admin/service/delete/${id}`);
       if (response.status == 200) {
-        alert("Delete Service ");
+        toast.success("Delete Service ");
         FetchService();
       }
     } catch (e) {

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "../common/Sidebar";
 import api from "../utils/Axios.config";
+import { toast } from "react-toastify";
 
 function ManageUsers() {
   const [users, setUsers] = useState([]);
@@ -26,10 +27,10 @@ function ManageUsers() {
       await api.put(`/admin/users/activeStatus/${id}`, {
         status: newStatus,
       });
-
+      toast.success("update status successfully.");
       FetchUser(); 
     } catch (err) {
-      alert("Failed to update status");
+      toast.error("Failed to update status");
     }
   };
 
@@ -39,9 +40,10 @@ function ManageUsers() {
 
     try {
       await api.delete(`/admin/users/${id}`);
+      toast.success("Delete User");
       FetchUser();
     } catch (err) {
-      alert("Failed to delete user");
+      toast.error("Failed to delete user");
     }
   };
 

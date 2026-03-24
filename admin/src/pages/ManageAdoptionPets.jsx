@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "../common/Sidebar";
 import api from "../utils/Axios.config";
+import { toast } from "react-toastify";
 
 function ManageAdoptionPets() {
   const [pets, setPets] = useState([]);
@@ -23,9 +24,8 @@ function ManageAdoptionPets() {
    try {
       let response = await api.delete(`/admin/adoption/delete/${id}`);
       if (response.status == 200) {
-        alert("Delete Pet adoption Request");
+        toast.success("Delete Pet adoption Request");
         FetchAdoptPets();
-        navigate("/manage-petAdoption")
       }
     } catch (e) {
       console.log(e);

@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import Sidebar from '../common/Sidebar';
 import Footer from '../common/Footer';
 import api from '../utils/Axios.config';
+import { toast } from "react-toastify";
 
 function ServiceCateEdit() {
   const navigate = useNavigate();
@@ -47,12 +48,11 @@ function ServiceCateEdit() {
     try {
         let response = await api.put(`/admin/servicecategory/edit/${sercate._id}` , formData);
         if(response.status == 200) {
-          alert("Service category updated successfully.")
-          navigate("/manage-servicecategories")
+          toast.success("Service category updated successfully." , {onClose: () => {navigate("/manage-servicecategories")}})
         }
     } catch (e) {
       console.log(e);
-      alert("Failed to update service category");  
+      toast.error("Failed to update service category");  
     }
   }
   return (
