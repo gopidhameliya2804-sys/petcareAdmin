@@ -1,6 +1,7 @@
 import './App.css'
 import { HashRouter } from "react-router-dom";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { ToastContainer } from 'react-toastify';
 import Header from './common/Header';
 import Footer from './common/Footer';
 import Index from './pages/Index';
@@ -89,6 +90,7 @@ function App() {
   
   return (
     <>
+      <ToastContainer  position='top-right' autoClose="2000" theme='colored' style={{zIndex:"999999"}} />
       <BrowserRouter>
         {/* <Header /> */}
         <Routes>

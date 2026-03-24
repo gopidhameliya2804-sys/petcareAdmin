@@ -3,6 +3,7 @@ import { useState } from "react";
 import cookie from "js-cookie";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 function Login() {
   const navigate = useNavigate();
@@ -33,16 +34,14 @@ function Login() {
           email:"",
           password:""
         })
-        alert("Login Successful");
-        navigate("/");
+        toast.success("Login Successful" , {onClose: () => {navigate("/")}});
       }  
     } catch (e) {
       setAdmin({
           email:"",
           password:""
         })
-        alert(" Invlalid Details");
-        navigate("/login");
+        toast.error(" Invlalid Details" , {onClose: () => {navigate("/login")}});
     }
   }
   // console.log(admin);
