@@ -5,18 +5,11 @@ let AddPet = async (req, res) => {
   try {
     let db = await connectDb();
     let collection = db.collection("pet");
-    const { pet_cate_id, name,  desc, age, status, timestamp } = req.body;
+    const { pet_cate_id, name, desc, age, status, timestamp } = req.body;
     const image = req.file.filename;
     // console.log(image);
 
-    if (
-      !pet_cate_id ||
-      !name ||
-      !image ||
-      !desc ||
-      !age ||
-      !status
-    ) {
+    if (!pet_cate_id || !name || !image || !desc || !age || !status) {
       // console.log(pet_cate_id);
       // console.log(name);
       // console.log(image);
@@ -37,7 +30,7 @@ let AddPet = async (req, res) => {
       desc: desc,
       age: age,
       status: "AVAILABLE",
-      ActiveStatus:true,
+      ActiveStatus: true,
       timestamp: new Date(),
     });
 
@@ -67,9 +60,7 @@ let getAllPet = async (req, res) => {
   let db = await connectDb();
   let collection = db.collection("pet");
   const { id } = req.params;
-  let petData = await collection
-    .find({})
-    .toArray();
+  let petData = await collection.find({}).toArray();
   if (!petData) {
     res.send({ status: false, Message: "data not found", data: null });
   } else {
@@ -81,43 +72,63 @@ let EditPet = async (req, res) => {
   try {
     let db = await connectDb();
     let collection = db.collection("pet");
-    const {_id , pet_cate_id , name, desc, age, status, timestamp } = req.body;
+    const {
+      _id,
+      pet_cate_id,
+      name,
+      desc,
+      age,
+      status,
+      ActiveStatus,
+      timestamp,
+    } = req.body;
     const { id } = req.params;
     let petData = await collection.findOne({
       _id: ObjectId.createFromHexString(id),
     });
     if (!petData) {
       res.send({ status: false, Message: "data not found", data: null });
-    } 
+    }
 
     let updateobj = {
-      name:name || petData.name,
+      name: name || petData.name,
       desc: desc || petData.desc,
-      age: age || petData.age ,
+      age: age || petData.age,
       status: status || petData.status,
-      timestamp: timestamp ?new Date(timestamp) : petData.timestamp
-    }
+      ActiveStatus: status ? status === "AVAILABLE" : petData.ActiveStatus,
+      timestamp: timestamp ? new Date(timestamp) : petData.timestamp,
+    };
     if (req.file) {
       updateobj.image = req.file.filename;
     }
-    
-    let updateQuery = await collection.updateOne({_id:ObjectId.createFromHexString(id)}, {$set:updateobj});
+
+    let updateQuery = await collection.updateOne(
+      { _id: ObjectId.createFromHexString(id) },
+      { $set: updateobj },
+    );
     if (updateQuery.acknowledged) {
       res
         .status(200)
         .send({ status: true, Message: "Pet updated successfully" });
     }
   } catch (e) {
-    res.status(500).send({ status: false, Message: "Internal Server Error. Please try again later." });
+    res
+      .status(500)
+      .send({
+        status: false,
+        Message: "Internal Server Error. Please try again later.",
+      });
   }
 };
 
 let DeletePet = async (req, res) => {
   try {
     let db = await connectDb();
-    let collection = db.collection("pet"); 
+    let collection = db.collection("pet");
     const { id } = req.params;
-    let deleteQuery = await collection.deleteOne({_id:ObjectId.createFromHexString(id)});
+    let deleteQuery = await collection.deleteOne({
+      _id: ObjectId.createFromHexString(id),
+    });
     if (deleteQuery.acknowledged) {
       res
         .status(200)
@@ -126,7 +137,6 @@ let DeletePet = async (req, res) => {
   } catch (e) {
     res.status(500).send({ status: false, Message: "some error occured" });
   }
-}
+};
 
-
-module.exports = { AddPet, getPet , getAllPet , EditPet , DeletePet };
+module.exports = { AddPet, getPet, getAllPet, EditPet, DeletePet };
