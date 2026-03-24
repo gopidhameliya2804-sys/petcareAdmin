@@ -66,7 +66,7 @@ function EditPet() {
         formData.append("image", pet.newImage);
       }
 
-      const response = await api.put(`/admin/pet/edit/${pet.id}`, formData);
+      const response = await api.put(`/admin/pet/edit/${pet._id}`, formData);
       if (response.status === 200) {
         toast.success("Pet updated successfully");
         navigate("/manage-pet");
