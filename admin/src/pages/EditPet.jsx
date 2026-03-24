@@ -72,7 +72,9 @@ function EditPet() {
         navigate("/manage-pet");
       }
     } catch (err) {
-      console.error(err);
+      setPet({
+        name:"",
+      })
       toast.error("Failed to update pet");
     }
   };

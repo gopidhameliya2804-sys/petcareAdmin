@@ -81,14 +81,14 @@ let EditPet = async (req, res) => {
   try {
     let db = await connectDb();
     let collection = db.collection("pet");
-    const {_id , pet_cate_id , name, desc, age, status, timestamp } = req.body;
+    const {_id , pet_cate_id , name, desc, age, status } = req.body;
     const { id } = req.params;
     let petData = await collection.findOne({
       _id: ObjectId.createFromHexString(id),
     });
     if (!petData) {
       res.send({ status: false, Message: "data not found", data: null });
-    } 
+    }
 
     let updateobj = {
       name:name || petData.name,
