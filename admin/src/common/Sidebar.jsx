@@ -67,17 +67,20 @@ function Sidebar() {
                 <img src="/assets/images/logo/logo.png" alt="Logo" />
               </a>
             </div>
-            <div className="toggler">
-              <button
-                onClick={toggleSidebar}
-                className="sidebar-hide d-xl-none d-block"
-              >
-                <i className="bi bi-x"></i>
-              </button>
-            </div>
-            <div className="ms-3">
-              <h6>Welcome , {adminDetails.name}</h6>
-            </div>
+           <div className="d-flex align-items-center">
+  <div className="toggler me-3">
+    <button
+      onClick={toggleSidebar}
+      className="sidebar-hide d-xl-none d-block"
+    >
+      <i className="bi bi-x"></i>
+    </button>
+  </div>
+
+  <div>
+    <h6 className="mb-0">Welcome, {adminDetails.name}</h6>
+  </div>
+</div>
           </div>
         </div>
 
