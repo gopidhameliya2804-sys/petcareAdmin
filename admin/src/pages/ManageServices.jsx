@@ -119,7 +119,7 @@ function ManageServices() {
                           <td className="fw-bold">{value.name}</td>
 
                           {/* IMAGE */}
-                          <td>
+                          <td style={{ maxWidth: "100px" }}>
                             <img
                               src={`${api.defaults.baseURL}/uploads/${value.image}`}
                               alt={value.name}
