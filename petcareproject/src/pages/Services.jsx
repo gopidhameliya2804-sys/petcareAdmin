@@ -21,7 +21,7 @@ function Services() {
 
  const { data:service, isLoading, isError, error } = useQuery({
     queryKey: ["service"],
-    queryFn: FetchPet,
+    queryFn: FetchServices,
   });
 
 

@@ -21,7 +21,7 @@ function ServiceCategory() {
 
   const { data:serviceCategories, isLoading, isError, error } = useQuery({
     queryKey: ["serviceCategories"],
-    queryFn: FetchPet,
+    queryFn: FetchServiceCategory,
   });
 
   return (

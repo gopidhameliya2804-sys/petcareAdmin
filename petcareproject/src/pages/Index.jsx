@@ -7,8 +7,8 @@ import api from "../utils/AxiosConfig";
 function Index() {
   let [user, setUser] = useState({});
   const [activeSlide, setActiveSlide] = useState(0);
-  const [feedback, setFeedback] = useState({});
-  const [loading, setLoading] = useState(true);
+  // const [feedback, setFeedback] = useState({});
+  // const [loading, setLoading] = useState(true);
 
   const settings = {
     dots: true,
@@ -46,17 +46,21 @@ function Index() {
     try {
       let response = await api.get("/user/feedback");
       console.log(response.data.data);
-      setFeedback(response.data.data.slice(0, 2));
-      setLoading(false);
+      return response.data.data.slice(0, 2);
     } catch (e) {
       console.log(e);
-      setLoading(false);
     }
   };
 
-  useEffect(() => {
-    FetchFeedback();
-  }, []);
+  const {
+    data: feedbacks,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["feedbacks"],
+    queryFn: FetchFeedback,
+  });
 
   return (
     <div>
@@ -415,8 +419,8 @@ function Index() {
                     </h3>
                     <p>
                       Dog sitting provides temporary care for dogs, including
-                      feeding, walking, playtime, and maintaining
-                      their daily routine.
+                      feeding, walking, playtime, and maintaining their daily
+                      routine.
                     </p>
                     <div className="button">
                       <Link to="/dogsetting">Read More</Link>
@@ -916,10 +920,15 @@ function Index() {
               <div className="col-xl-12">
                 <div className="testimonial-carousel owl-carousel owl-theme">
                   {/* Feedback Card */}
-                  {loading ? (
+                  {isError && (
+                    <p style={{ color: "red" }}>
+                      {error?.message || "Something went wrong"}
+                    </p>
+                  )}
+                  {isLoading ? (
                     <p>User Feedabck Loading...</p>
-                  ) : feedback.length > 1 ? (
-                    feedback.map((value) => {
+                  ) : feedbacks.length > 1 ? (
+                    feedbacks.map((value) => {
                       return (
                         <>
                           <div className="single-testimonial-style1 no-image mt-4">

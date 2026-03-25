@@ -5,21 +5,21 @@ import api from "../utils/AxiosConfig";
 import BreadCrumbs from "../comman/BreadCrumbs";
 
 function Profile() {
-  let [userProfile, setUserProfile] = useState({});
+  // let [userProfile, setUserProfile] = useState({});
 
   async function FetchUserProfile() {
     try {
       let response = await api.get("/user/profile");
-      setUserProfile(response.data.users);
-      // console.log(response.data);
+      return response.data.users;
     } catch (e) {
       console.log(e);
     }
   }
 
-  useEffect(() => {
-    FetchUserProfile();
-  }, []);
+ const { data:userProfile, isLoading, isError, error } = useQuery({
+    queryKey: ["userProfile"],
+    queryFn: FetchUserProfile,
+  });
 
   // const user = {
   //   username: userProfile.name,
