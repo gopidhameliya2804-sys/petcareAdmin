@@ -4,25 +4,24 @@ import BreadCrumbs from "../comman/BreadCrumbs";
 import api from "../utils/AxiosConfig";
 
 function Services() {
-  let [services, setServices] = useState({});
-  let [Loading, setLoading] = useState(true);
+  // let [services, setServices] = useState({});
+  // let [Loading, setLoading] = useState(true);
   const { bycategoryid } = useParams();
 
   const FetchServices = async () => {
     try {
       let response = await api.get(`/user/services/${bycategoryid}`);
       console.log(response.data);
-      setServices(response.data.data);
-      setLoading(false);
+      return response.data.data;
     } catch (e) {
       console.log(e);
-      setLoading(false);
     }
   };
 
-  useEffect(() => {
-    FetchServices();
-  }, []);
+ const { data:service, isLoading, isError, error } = useQuery({
+    queryKey: ["service"],
+    queryFn: FetchPet,
+  });
 
 
   return (
@@ -39,10 +38,15 @@ function Services() {
         <section id="blog-area" className="blog-grid-area">
           <div className="container">
             <div className="row">
-              {Loading ? (
+              {isError && (
+              <p style={{ color: "red" }}>
+                {error?.message || "Something went wrong"}
+              </p>
+            )}
+              {isLoading ? (
                 <p>Loading...</p>
-              ) : services.length > 0 ? (
-                services.map((value, index) => {
+              ) : service.length > 0 ? (
+                service.map((value, index) => {
                   return (
                     <>
                       <div className="col-xl-4 col-lg-6 col-md-6">

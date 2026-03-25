@@ -4,25 +4,24 @@ import BreadCrumbs from "../comman/BreadCrumbs";
 import api from "../utils/AxiosConfig";
 
 function ServiceCategory() {
-  let [serviceCategory, setServiceCategory] = useState({});
-  let [loading, setLoading] = useState(true);
+  // let [serviceCategory, setServiceCategory] = useState({});
+  // let [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   const FetchServiceCategory = async () => {
     try {
       let response = await api.get("/user/servicecategory/");
       console.log(response.data);
-      setServiceCategory(response.data.data);
-      setLoading(false);
+      return response.data.data;
     } catch (e) {
       console.log(e);
-      setLoading(false);
     }
   };
 
-  useEffect(() => {
-    FetchServiceCategory();
-  }, []);
+  const { data:serviceCategories, isLoading, isError, error } = useQuery({
+    queryKey: ["serviceCategories"],
+    queryFn: FetchPet,
+  });
 
   return (
     <div>
@@ -38,10 +37,15 @@ function ServiceCategory() {
         <section id="blog-area" className="blog-grid-area">
           <div className="container">
             <div className="row">
-              {loading ? (
+              {isError && (
+              <p style={{ color: "red" }}>
+                {error?.message || "Something went wrong"}
+              </p>
+            )}
+              {isLoading ? (
                 <p>Loading...</p>
-              ) : serviceCategory.length > 0 ? (
-                serviceCategory.map((value, index) => {
+              ) : serviceCategories.length > 0 ? (
+                serviceCategories.map((value, index) => {
                   return (
                     <>
                       <div

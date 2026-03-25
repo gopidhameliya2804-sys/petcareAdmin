@@ -9,18 +9,16 @@ import { useQuery } from "@tanstack/react-query";
 function Pet() {
   const { bycategoryid } = useParams();
   const navigate = useNavigate();
-  let [pet, setPet] = useState({});
-  const [loading, setLoading] = useState(true);
+  // let [pet, setPet] = useState({});
+  // const [loading, setLoading] = useState(true);
 
   const FetchPet = async (e) => {
     try {
       let response = await api.get(`/user/pet/${bycategoryid}`);
       console.log(response.data);
-      setPet(response.data.data);
-      setLoading(false);
+      return response.data.data;
     } catch (e) {
       console.log(e);
-      setLoading(false);
     }
   };
 
@@ -47,10 +45,15 @@ function Pet() {
         <section id="blog-area" className="blog-grid-area">
           <div className="container">
             <div className="row">
-              {loading ? (
+              {isError && (
+              <p style={{ color: "red" }}>
+                {error?.message || "Something went wrong"}
+              </p>
+            )}
+              {isLoading ? (
                 <p>Loading...</p>
-              ) : pet.length > 0 ? (
-                pet.map((value, index) => {
+              ) : pets.length > 0 ? (
+                pets.map((value, index) => {
                   return (
                     <>
                       <div
