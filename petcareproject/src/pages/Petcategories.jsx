@@ -7,19 +7,17 @@ import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 
 function PetCategories() {
-  let [petCategory, setPetCategory] = useState([]);
-  const [loading, setLoading] = useState(true);
+  // let [petCategory, setPetCategory] = useState([]);
+  // const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   let FetchPetCategory = async (e) => {
     try {
       let response = await api.get("/user/petcategory");
       console.log(response.data);
-      setPetCategory(response.data.data);
-      setLoading(false);
+      return response.data.data;
     } catch (e) {
       console.log(e);
-      setLoading(false);
     }
   };
 
@@ -44,10 +42,15 @@ function PetCategories() {
           <div className="container">
             <div className="row">
               {/* Labrador */}
-              {loading ? (
+              {isError && (
+              <p style={{ color: "red" }}>
+                {error?.message || "Something went wrong"}
+              </p>
+            )}
+              {isLoading ? (
                 <p>Loading....</p>
-              ) : petCategory.length > 0 ? (
-                petCategory.map((value, index) => {
+              ) : petcategory.length > 0 ? (
+                petcategory.map((value, index) => {
                   return (
                     <>
                       <div
