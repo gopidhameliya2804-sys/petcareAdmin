@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Logout from "../utils/Logout";
 import api from "../utils/AxiosConfig";
 import BreadCrumbs from "../comman/BreadCrumbs";
+import { useQuery } from "@tanstack/react-query";
 
 function Profile() {
   // let [userProfile, setUserProfile] = useState({});

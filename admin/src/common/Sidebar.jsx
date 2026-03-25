@@ -75,7 +75,7 @@ function Sidebar() {
                 <i className="bi bi-x"></i>
               </button>
             </div>
-            <div>
+            <div className="ms-3">
               <h6>Welcome , {adminDetails.name}</h6>
             </div>
           </div>

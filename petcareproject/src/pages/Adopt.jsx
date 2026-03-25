@@ -2,27 +2,27 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import BreadCrumbs from "../comman/BreadCrumbs";
 import api from "../utils/AxiosConfig";
+import { useQuery } from "@tanstack/react-query";
 
 function AdoptPets() {
-  let [adoptedPets, setAdoptedPets] = useState([]);
-  let [loading, setLoading] = useState(true);
+  // let [adoptedPets, setAdoptedPets] = useState([]);
+  // let [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   const FetchAdotedPets = async () => {
     try {
       let responsive = await api.get("/user/adoption/all");
       console.log(responsive.data.data);
-      setAdoptedPets(responsive.data.data);
-      setLoading(false);
+      return responsive.data.data;
     } catch (e) {
       console.log(e);
-      setLoading(true);
     }
   };
 
-  useEffect(() => {
-    FetchAdotedPets();
-  }, []);
+  const { data:adoptedPets, isLoading, isError, error } = useQuery({
+    queryKey: ["adoptedPets"],
+    queryFn: FetchAdotedPets,
+  });
 
 
   return (
@@ -50,7 +50,7 @@ function AdoptPets() {
                     <div className="img-holder">
                       <div className="inner">
                         <img
-                          src={item.pet_image}
+                          src={`${api.defaults.baseURL}/uploads/${item.image}`}
                           alt={item.pet_name}
                           style={{ height: "300px" }}
                         />
