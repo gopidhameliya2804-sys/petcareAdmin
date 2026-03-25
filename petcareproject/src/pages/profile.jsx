@@ -3,24 +3,22 @@ import { Link } from "react-router-dom";
 import Logout from "../utils/Logout";
 import api from "../utils/AxiosConfig";
 import BreadCrumbs from "../comman/BreadCrumbs";
-import { useQuery } from "@tanstack/react-query";
 
 function Profile() {
-  // let [userProfile, setUserProfile] = useState({});
+  let [userProfile, setUserProfile] = useState({});
 
   async function FetchUserProfile() {
     try {
       let response = await api.get("/user/profile");
-      return response.data.users;
+      setUserProfile(response.data.users);
     } catch (e) {
       console.log(e);
     }
   }
 
- const { data:userProfile, isLoading, isError, error } = useQuery({
-    queryKey: ["userProfile"],
-    queryFn: FetchUserProfile,
-  });
+  useEffect(() => {
+    FetchUserProfile();
+  }, []);
 
   // const user = {
   //   username: userProfile.name,
