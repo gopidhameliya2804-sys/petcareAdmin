@@ -4,6 +4,7 @@ import BreadCrumbs from "../comman/BreadCrumbs";
 import { useState } from "react";
 import api from "../utils/AxiosConfig";
 import { useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 
 function PetCategories() {
   let [petCategory, setPetCategory] = useState([]);

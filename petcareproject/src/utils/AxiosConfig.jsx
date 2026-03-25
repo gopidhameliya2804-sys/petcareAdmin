@@ -2,13 +2,14 @@ import axios  from "axios";
 import CheckToken from "./CheckToken";
 import { LogoutWithoutNotification } from "./Logout";
 
+
 let api = axios.create({
     baseURL: "https://petcarebackend-wzcq.onrender.com/api",
 });
 
 api.interceptors.request.use((config) => {
     let token = CheckToken();
-    config.headers.Authorization = `bearer ${token}`;
+    config.headers.Authorization = `Bearer ${token}`;
     return config;
 })
 
