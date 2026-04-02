@@ -4,6 +4,7 @@ import Footer from "../common/Footer";
 import api from "../utils/Axios.config";
 import cookie from "js-cookie";
 import { toast } from "react-toastify";
+import { useMutation } from "@tanstack/react-query";
 
 function PetCategoryInput() {
   const [admin, setAdmin] = useState({});
@@ -28,10 +29,7 @@ function PetCategoryInput() {
     setPreview(URL.createObjectURL(file));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    try {
+  const addPetCategory = async ({ petcategory, selectFile }) => {
     const formData = new FormData();
     formData.append("name", petcategory.name);
     formData.append("image", selectFile);
@@ -41,22 +39,48 @@ function PetCategoryInput() {
       formData,
     );
 
-    if (response.data.token) {
-      cookie.set("token", response.data.token);
-    }
+    return response.data;
+  };
 
-    toast.success("Pet Category Added Successfully" ,{onClose: () => {window.location.href = "/manage-petcategory"}});
+  const mutation = useMutation({
+    mutationFn: addPetCategory,
 
-    setPetCategory({
-      name: "",
-      image: "",
-    });
-    } catch (err) {
+    onSuccess: (data) => {
+      if (data.token) {
+        cookie.set("token", data.token);
+      }
+
+      toast.success("Pet Category Added Successfully", {
+        onClose: () => {
+          window.location.href = "/manage-petcategory";
+        },
+      });
+
+      setPetCategory({
+        name: "",
+        image: "",
+      });
+
+      setSelectFile(null);
+    },
+
+    onError: (err) => {
       console.error(err);
       toast.error("Something went wrong");
+    },
+  });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (!selectFile) {
+      toast.error("Please select an image");
+      return;
     }
+
+    mutation.mutate({ petcategory, selectFile });
   };
-  console.log(petcategory);
+  // console.log(petcategory);
 
   return (
     <div id="app">
@@ -139,11 +163,12 @@ function PetCategoryInput() {
                   {/* Buttons */}
                   <div className="row mt-4">
                     <div className="col-12">
-                      <input
-                        type="submit"
-                        className="btn btn-primary"
-                        value={"Save Category"}
-                      />
+                      <button
+                    className="btn btn-primary"
+                    disabled={mutation.isPending}
+                  >
+                    {mutation.isPending ? "Adding..." : "Save Pet Category"}
+                  </button>
 
                       <button
                         type="reset"

@@ -34,6 +34,8 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 
 function App() {
+  
+  console.log(import.meta.env.VITE_API_URL);
   return (
     <>
       <ToastContainer position="top-right" autoClose={3000} theme="colored" style={{zIndex:999999}}/>  

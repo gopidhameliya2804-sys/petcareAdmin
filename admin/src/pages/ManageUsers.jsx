@@ -2,23 +2,33 @@ import React, { useEffect, useState } from "react";
 import Sidebar from "../common/Sidebar";
 import api from "../utils/Axios.config";
 import { toast } from "react-toastify";
+import { useQuery } from "@tanstack/react-query";
 
 function ManageUsers() {
-  const [users, setUsers] = useState([]);
+  // const [users, setUsers] = useState([]);
 
   const FetchUser = async () => {
     try {
       let response = await api.get("/admin/users");
       console.log(response.data);
-      setUsers(response.data.data || []);
+      return response.data.data;
     } catch (e) {
       console.log(e);
     }
   };
 
-  useEffect(() => {
-    FetchUser();
-  }, []);
+  // useEffect(() => {
+  //   FetchUser();
+  // }, []);
+
+  const {
+    data: users = [],
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["users"],
+    queryFn: FetchUser,
+  });
 
   const handleToggleStatus = async (id, currentStatus) => {
     try {
@@ -28,13 +38,12 @@ function ManageUsers() {
         status: newStatus,
       });
       toast.success("update status successfully.");
-      FetchUser(); 
+      FetchUser();
     } catch (err) {
       toast.error("Failed to update status");
     }
   };
 
-  
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this user?")) return;
 
@@ -47,10 +56,13 @@ function ManageUsers() {
     }
   };
 
- 
   const totalUsers = users.length;
-  const activeUsers = users.filter(u => users.activeStatus?.toLowerCase() === "active").length;
-  const blockedUsers = users.filter(u => users.activeStatus?.toLowerCase() === "blocked").length;
+  const activeUsers = users.filter(
+    (u) => users.activeStatus?.toLowerCase() === "active",
+  ).length;
+  const blockedUsers = users.filter(
+    (u) => users.activeStatus?.toLowerCase() === "blocked",
+  ).length;
 
   return (
     <div id="app">
@@ -98,60 +110,65 @@ function ManageUsers() {
         <section className="section mt-4">
           <div className="card">
             <div className="card-body table-responsive">
-              <table className="table table-hover table-striped">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Role</th>
-                    {/* <th>Status</th> */}
-                    <th className="text-center">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {users.map((user, index) => (
-                    <tr key={user._id}>
-                      <td>{index + 1}</td>
-                      <td>{user.username}</td>
-                      <td>{user.email}</td>
-                      <td>{user.role}</td>
-                      {/* <td>
-                        <span className={`badge ${user.activeStatus === "Active" ? "bg-success" : "bg-danger"}`}>
-                          {user.activeStatus}
-                        </span>
-                      </td> */}
-                      <td className="text-center">
-                        <button
-                          onClick={() => handleToggleStatus(user._id, user.activeStatus)}
-                          className={`btn btn-sm ${
-                            user.activeStatus === "Active"
-                              ? "btn-outline-warning"
-                              : "btn-outline-success"
-                          }`}
-                        >
-                          {user.activeStatus === "Active" ? "Block" : "Activate"}
-                        </button>
+              {isLoading ? (
+                <p>Loading users Data...</p>
+              ) : (
+                <>
+                  <table className="table table-hover table-striped">
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        {/* <th>Status</th> */}
+                        <th className="text-center">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {users.map((user, index) => (
+                        <tr key={user._id}>
+                          <td>{index + 1}</td>
+                          <td>{user.username}</td>
+                          <td>{user.email}</td>
+                          <td>{user.role}</td>
+                          <td className="text-center">
+                            <button
+                              onClick={() =>
+                                handleToggleStatus(user._id, user.activeStatus)
+                              }
+                              className={`btn btn-sm ${
+                                user.activeStatus === "Active"
+                                  ? "btn-outline-warning"
+                                  : "btn-outline-success"
+                              }`}
+                            >
+                              {user.activeStatus === "Active"
+                                ? "Block"
+                                : "Activate"}
+                            </button>
 
-                        <button
-                          onClick={() => handleDelete(user._id)}
-                          className="btn btn-sm btn-outline-danger ms-2"
-                        >
-                          Delete
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
+                            <button
+                              onClick={() => handleDelete(user._id)}
+                              className="btn btn-sm btn-outline-danger ms-2"
+                            >
+                              Delete
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
 
-                  {users.length === 0 && (
-                    <tr>
-                      <td colSpan="6" className="text-center text-muted">
-                        No users found
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
+                      {users.length === 0 && (
+                        <tr>
+                          <td colSpan="6" className="text-center text-muted">
+                            No users found
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </>
+              )}
             </div>
           </div>
         </section>

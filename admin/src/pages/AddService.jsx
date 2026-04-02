@@ -3,12 +3,16 @@ import Sidebar from "../common/Sidebar";
 import Footer from "../common/Footer";
 import api from "../utils/Axios.config";
 import cookie from "js-cookie";
+import { Link, useNavigate } from "react-router-dom";
+
+import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 
 function ServiceInput() {
   const [preview, setPreview] = useState(null);
   const [categories, setCategories] = useState([]);
   const [selectFile, setSelectFile] = useState(null);
+  const navigate = useNavigate();
   const [service, setService] = useState({
     ser_cate_id: "",
     name: "",
@@ -46,44 +50,59 @@ function ServiceInput() {
     setPreview(URL.createObjectURL(file));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const addService = async ({ service, selectFile }) => {
+    const formData = new FormData();
 
-    const payload = {
-      ...service,
-      timestamp: new Date(),
-    };
+    formData.append("ser_cate_id", service.ser_cate_id);
+    formData.append("name", service.name);
+    formData.append("image", selectFile);
+    formData.append("desc", service.desc);
+    formData.append("price", service.price);
+    formData.append("status", service.status);
+    formData.append("timestamp", new Date());
 
-    try {
-      const formData = new FormData();
-      formData.append("ser_cate_id", service.ser_cate_id); 
-      formData.append("name", service.name);
-      formData.append("image", selectFile);
-      formData.append("desc", service.desc);
-      formData.append("price", service.price);
-      formData.append("status", service.status);
-      formData.append("timestamp", new Date());
+    const response = await api.post("/admin/service/addservice", formData);
+    return response.data;
+  };
+  const mutation = useMutation({
+    mutationFn: addService,
 
-      const response = await api.post("/admin/service/addservice", formData);
-      if (response.data.token) {
-        cookie.set("token", response.data.token);
+    onSuccess: (data) => {
+      if (data.token) {
+        cookie.set("token", data.token);
       }
 
-      toast.success("Service Added Successfully" , {onClose: () => {window.location.href = "/manage-services"}});
+      toast.success("Service Added Successfully", {
+        onClose: () => {
+          navigate("/manage-services");
+        },
+      });
 
       setService({
         ser_cate_id: "",
         name: "",
-        image: "",
         desc: "",
         price: "",
         status: "Active",
-        timestamp: new Date(),
       });
-    } catch (err) {
+
+      setSelectFile(null);
+    },
+
+    onError: (err) => {
       console.error(err);
       toast.error("Failed to add service");
+    },
+  });
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (!selectFile) {
+      toast.error("Please select an image");
+      return;
     }
+
+    mutation.mutate({ service, selectFile });
   };
 
   return (
@@ -211,7 +230,12 @@ function ServiceInput() {
 
                 {/* BUTTONS */}
                 <div className="mt-4">
-                  <button className="btn btn-primary">Save Service</button>
+                  <button
+                    className="btn btn-primary"
+                    disabled={mutation.isPending}
+                  >
+                    {mutation.isPending ? "Adding..." : "Save Service"}
+                  </button>
                   <button
                     type="button"
                     className="btn btn-light ms-2"

@@ -3,6 +3,7 @@ import BreadCrumbs from "../comman/BreadCrumbs";
 import { useNavigate } from "react-router-dom";
 import api from "../utils/AxiosConfig";
 import { toast } from "react-toastify";
+import { useMutation } from "@tanstack/react-query";
 
 function Feedback() {
   const navigate = useNavigate();
@@ -24,33 +25,44 @@ function Feedback() {
     setFeedback((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const addFeedback = async (feedback) => {
+  const response = await api.post("/user/feedback/addfeedback", feedback);
+  return response.data;
+};
 
-    if (feedback.rating === 0) {
-      toast.error("Please select a rating");
-      return;
-    }
+const mutation = useMutation({
+  mutationFn: addFeedback,
 
-    try {
-      setLoading(true);
-      await api.post("/user/feedback/addfeedback", feedback);
-      toast.success("Thank you for your feedback!" , {onClick: () => { navigate("/")}});
-      setFeedback({
-        rating: 0,
-        name: "",
-        email: "",
-        review: "",
-        user_id : profile._id,
-        timestamp: new Date(),
-      })
-    } catch (err) {
-      console.error(err);
-      toast.error("Something went wrong");
-    } finally {
-      setLoading(false);
-    }
-  };
+  onSuccess: () => {
+    toast.success("Thank you for your feedback!", {
+      onClose: () => navigate("/"),
+    });
+
+    setFeedback({
+      rating: 0,
+      name: "",
+      email: "",
+      review: "",
+      user_id: profile._id,
+      timestamp: new Date(),
+    });
+  },
+
+  onError: () => {
+    toast.error("Something went wrong");
+  },
+});
+
+  const handleSubmit = (e) => {
+  e.preventDefault();
+
+  if (feedback.rating === 0) {
+    toast.error("Please select a rating");
+    return;
+  }
+
+  mutation.mutate(feedback);
+};
 
   async function FetchUserProfile() {
     try {
@@ -69,6 +81,9 @@ function Feedback() {
   useEffect(() => {
     FetchUserProfile();
   }, []);
+
+
+
 
   
 
@@ -188,10 +203,11 @@ function Feedback() {
                         <button
                           className="btn-one gradient-bg-1"
                           type="submit"
+                          disabled={mutation.isPending}
                         >
                           <span className="txt">
                             <i className="icon-send" />
-                            Submit feedback
+                            {mutation.isPending ? "Submitting..." : "Submit feedback"}
                           </span>
                         </button>
                       </div>

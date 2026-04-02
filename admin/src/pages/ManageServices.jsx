@@ -3,24 +3,25 @@ import Sidebar from "../common/Sidebar";
 import api from "../utils/Axios.config";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useQuery } from "@tanstack/react-query";
 
 function ManageServices() {
-  let [service, setService] = useState([]);
+  // let [service, setService] = useState([]);
   const navigate = useNavigate();
   const FetchService = async () => {
     try {
       let response = await api.get("/admin/service/");
       console.log(response.data);
-      setService(response.data.data);
+      return response.data.data;
     } catch (e) {
       console.log(e);
     }
   };
 
-  useEffect(() => {
-    FetchService();
-  }, []);
-  console.log(service);
+  const {data : service = [] , isLoading , isError } = useQuery({
+    queryKey: ["service"],
+    queryFn: FetchService,
+  });
 
   const DeleteService = async (id) => {
     try {
@@ -94,6 +95,7 @@ function ManageServices() {
           <div className="card shadow-sm border-0">
             <div className="card-body">
               <div className="table-responsive">
+                {isLoading ? (<p>Loading Serivces Data...</p>) : (<>
                 <table className="table table-striped align-middle">
                   <thead className="table-light">
                     <tr>
@@ -137,7 +139,7 @@ function ManageServices() {
                             <span
                               className="text-truncate d-inline-block"
                               style={{ maxWidth: "230px" }}
-                            >
+                              >
                               {value.desc}
                             </span>
                           </td>
@@ -152,7 +154,7 @@ function ManageServices() {
                                 value.status === "Active"
                                   ? "bg-success"
                                   : "bg-danger"
-                              }`}
+                                  }`}
                             >
                               {value.status}
                             </span>
@@ -169,7 +171,7 @@ function ManageServices() {
                               to="/edit-service"
                               state={value}
                               className="btn btn-sm btn-outline-primary me-2"
-                            >
+                              >
                               Edit
                             </Link>
                             <button
@@ -177,7 +179,7 @@ function ManageServices() {
                               onClick={() => {
                                 DeleteService(value._id);
                               }}
-                            >
+                              >
                               Delete
                             </button>
                           </td>
@@ -192,6 +194,7 @@ function ManageServices() {
                     )}
                   </tbody>
                 </table>
+                </>)}
               </div>
             </div>
           </div>

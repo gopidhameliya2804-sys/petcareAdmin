@@ -3,23 +3,25 @@ import Sidebar from "../common/Sidebar";
 import api from "../utils/Axios.config";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useQuery } from "@tanstack/react-query";
 
 function ManageServiceCategories() {
-  const [serviceCategory, setServiceCategory] = useState([]);
+  // const [serviceCategory, setServiceCategory] = useState([]);
   const navigate = useNavigate();
 
   const FetchServiceCategory = async () => {
     try {
       const response = await api.get("/admin/servicecategory/");
-      setServiceCategory(response.data.data || []);
+      return response.data.data;
     } catch (error) {
       console.log(error);
     }
   };
 
-  useEffect(() => {
-    FetchServiceCategory();
-  }, []);
+  const {data : serviceCategory = [] , isLoading , isError} = useQuery({
+      queryKey: ["serviceCategory"],
+      queryFn: FetchServiceCategory,
+    });
 
   const DeleteSerCategory = async (id) => {
     try {
@@ -98,6 +100,7 @@ function ManageServiceCategories() {
            <section className="section mt-4">
           <div className="card shadow-sm">
             <div className="card-body table-responsive">
+              {isLoading ? (<p>Loading Service Category Data...</p>): (<>
               <table className="table table-striped align-middle">
                 <thead className="table-light">
                   <tr>
@@ -132,19 +135,19 @@ function ManageServiceCategories() {
                                 objectFit: "cover",
                                 borderRadius: "8px",
                               }}
-                            />
-                          ) : (
-                            "No Image"
+                              />
+                            ) : (
+                              "No Image"
                           )}
                         </td>
                         <td>
                           <span
                             className={`badge ${
                               value.status === "Active"
-                                ? "bg-danger"
-                                : "bg-success"
-                            }`}
-                          >
+                              ? "bg-danger"
+                              : "bg-success"
+                              }`}
+                              >
                             {value.status || "Active"}
                           </span>
                         </td>
@@ -162,6 +165,7 @@ function ManageServiceCategories() {
                   )}
                 </tbody>
               </table>
+              </>)}
             </div>
           </div>
         </section>

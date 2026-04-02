@@ -14,6 +14,7 @@ let AddServiceCategory = async (req, res) => {
     });
   }
   const image = req.file.filename;
+  
   if (!name || !image || !status) {
     res
       .status(404)

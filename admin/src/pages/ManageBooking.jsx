@@ -3,24 +3,26 @@ import Sidebar from "../common/Sidebar";
 import { useNavigate } from "react-router-dom";
 import api from "../utils/Axios.config";
 import { toast } from "react-toastify";
+import { useQuery } from "@tanstack/react-query";
 
 function ManageBookings() {
-  const [bookings, setBookings] = useState([]);
+  // const [bookings, setBookings] = useState([]);
   const navigate = useNavigate();
 
   const FetchBooking = async () => {
     try {
       let response = await api.get("/admin/booking/");
       console.log(response.data);
-      setBookings(response.data.data || []);
+      return response.data.data;
     } catch (e) {
       console.log(e);
     }
   };
 
-  useEffect(() => {
-    FetchBooking();
-  }, []);
+  const {data : bookings = [] , isLoading , isError} = useQuery({
+    queryKey: ["booking"],
+    queryFn: FetchBooking,
+  });
 
   const DeleteBooking = async (id) => {
     try {
@@ -50,6 +52,7 @@ function ManageBookings() {
   const total = bookings.length;
   const confirmed = bookings.filter((b) => b.status === "Confirmed").length;
   const pending = bookings.filter((b) => b.status === "PENDING").length;
+  const cancelled = bookings.filter((b) => b.status === "Cancelled").length;
 
   return (
     <div id="app">
@@ -69,8 +72,8 @@ function ManageBookings() {
 
         {/* STATS */}
         <section className="section mt-3">
-          <div className="row">
-            <div className="col-md-4">
+         <div className="row">
+            <div className="col-md-3">
               <div className="card shadow-sm">
                 <div className="card-body">
                   <h6 className="text-muted">Total Bookings</h6>
@@ -78,7 +81,7 @@ function ManageBookings() {
                 </div>
               </div>
             </div>
-            <div className="col-md-4">
+            <div className="col-md-3">
               <div className="card shadow-sm border-start border-success border-4">
                 <div className="card-body">
                   <h6 className="text-muted">Confirmed</h6>
@@ -86,11 +89,19 @@ function ManageBookings() {
                 </div>
               </div>
             </div>
-            <div className="col-md-4">
+            <div className="col-md-3">
               <div className="card shadow-sm border-start border-warning border-4">
                 <div className="card-body">
                   <h6 className="text-muted">Pending</h6>
                   <h4 className="text-warning">{pending}</h4>
+                </div>
+              </div>
+            </div>
+            <div className="col-md-3">
+              <div className="card shadow-sm border-start border-danger border-4">
+                <div className="card-body">
+                  <h6 className="text-muted">Cancelled</h6>
+                  <h4 className="text-danger">{cancelled}</h4>
                 </div>
               </div>
             </div>
@@ -101,6 +112,7 @@ function ManageBookings() {
         <section className="section mt-4">
           <div className="card shadow-sm">
             <div className="card-body table-responsive">
+              {isLoading?  (<p>Loading Booking Data...</p>) : (<>
               <table className="table table-hover align-middle">
                 <thead className="table-light">
                   <tr>
@@ -130,7 +142,7 @@ function ManageBookings() {
                           className="form-select form-select-sm"
                           value={b.status}
                           onChange={(e) => updateStatus(b._id, e.target.value)}
-                        >
+                          >
                           <option value="Pending">Pending</option>
                           <option value="Confirmed">Confirmed</option>
                           <option value="Cancelled">Cancelled</option>
@@ -152,6 +164,7 @@ function ManageBookings() {
                   ))}
                 </tbody>
               </table>
+              </>)}
             </div>
           </div>
         </section>

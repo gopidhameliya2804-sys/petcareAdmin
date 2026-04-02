@@ -4,38 +4,45 @@ import Footer from "../common/Footer";
 import api from "../utils/Axios.config";
 import cookie from "js-cookie";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
 
 function ServiceCategoryInput() {
   const [admin, setAdmin] = useState({});
-  const [preview , setPreview] = useState(null);
-  const [ selectFile , setSelectFile] = useState(null); 
+  const [preview, setPreview] = useState(null);
+  const [selectFile, setSelectFile] = useState(null);
+  const navigate = useNavigate();
+
   const [serviceCategory, setServiceCategory] = useState({
     name: "",
-    image: "",
+    image:"",
     adminId: "",
-    ActiveStatus: true,
-    timestamp: "",
+    status: "Active",
   });
 
+  // ✅ Fetch Admin
   const FetchAdmin = async () => {
     try {
       const res = await api.get("/admin/dashboard");
-      setAdmin(res.data.user);
+      const adminData = res.data.user;
+
+      console.log(adminData);
+      setAdmin(adminData);
 
       setServiceCategory((prev) => ({
         ...prev,
-        adminId: res.data.user._id,
+        adminId: adminData.id,
       }));
     } catch (err) {
       console.log("Unauthorized");
     }
   };
-
+ 
   useEffect(() => {
     FetchAdmin();
   }, []);
 
-  
+  // ✅ Handle Input Change
   const handleChange = (e) => {
     const { name, value } = e.target;
     setServiceCategory((prev) => ({
@@ -44,47 +51,87 @@ function ServiceCategoryInput() {
     }));
   };
 
+  // ✅ Handle File Change
   const handleFileChange = (e) => {
     const file = e.target.files[0];
+    if (!file) return;
+
     setSelectFile(file);
     setPreview(URL.createObjectURL(file));
-  }
-  
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const payload = {
-    ...serviceCategory,
-    timestamp: new Date(), 
   };
-    try {
-      const formData = new FormData();
-      formData.append("name" , serviceCategory.name);
-      formData.append("image" , selectFile);
-      formData.append("adminId" , serviceCategory.adminId);
-      formData.append("ActiveStatus" , serviceCategory.ActiveStatus);
 
-      const response = await api.post("/admin/servicecategory/addservicecategory", formData);
+  // ✅ Mutation Function
+  const addServiceCategory = async ({ serviceCategory, selectFile }) => {
+    if (!serviceCategory.adminId) {
+      throw new Error("Admin not loaded yet");
+    }
 
-      if (response.data.token) {
-        cookie.set("token", response.data.token);
+    const formData = new FormData();
+    formData.append("name", serviceCategory.name);
+    formData.append("adminId", serviceCategory.adminId);
+    formData.append("status", serviceCategory.status);
+    formData.append("timestamp", new Date());
+    if (selectFile) {
+      formData.append("image", selectFile);
+    }
+    console.log(formData);
+
+    const response = await api.post(
+      "/admin/servicecategory/addservicecategory",
+      formData
+    );
+
+    return response.data;
+  };
+
+  // ✅ useMutation
+  const mutation = useMutation({
+    mutationFn: addServiceCategory,
+
+    onSuccess: (data) => {
+      if (data.token) {
+        cookie.set("token", data.token);
       }
 
-      toast.success("Service Category Added Successfully" , {onClose: () => {window.location.href = "/manage-servicecategories"}});
+      toast.success("Service Category Added Successfully", {
+        onClose: () => navigate("/manage-servicecategories"),
+      });
 
+      // ✅ Reset Form
       setServiceCategory({
         name: "",
-        image: "",
         adminId: admin._id,
-        ActiveStatus: true,
-        timestamp: "",
+        status: "Active",
       });
-    } catch (err) {
+
+      setSelectFile(null);
+      setPreview(null);
+    },
+
+    onError: (err) => {
       console.error(err);
       toast.error("Failed to add service");
+    },
+  });
+
+  // ✅ Submit Handler
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (!serviceCategory.adminId) {
+      toast.error("Admin not loaded yet");
+      return;
     }
+
+    if (!selectFile) {
+      toast.error("Please select an image");
+      return;
+    }
+
+    mutation.mutate({ serviceCategory, selectFile });
   };
 
+  
   return (
     <div id="app">
       <Sidebar />
@@ -104,9 +151,9 @@ function ServiceCategoryInput() {
             </div>
 
             <div className="card-body">
-              <form onSubmit={handleSubmit} encType="multipart/form-data">
+              <form onSubmit={handleSubmit}>
                 <div className="row">
-                  {/* SERVICE NAME */}
+                  {/* NAME */}
                   <div className="col-md-6">
                     <label>Service Name</label>
                     <input
@@ -120,14 +167,12 @@ function ServiceCategoryInput() {
                     />
                   </div>
 
-                  {/* IMAGE URL */}
+                  {/* IMAGE */}
                   <div className="col-md-6">
-                    <label>Image URL</label>
+                    <label>Image</label>
                     <input
                       type="file"
-                      name="image"
                       className="form-control mt-2"
-                      placeholder="https://example.com/image.jpg"
                       accept="image/*"
                       onChange={handleFileChange}
                       required
@@ -135,7 +180,7 @@ function ServiceCategoryInput() {
                   </div>
                 </div>
 
-                {/* IMAGE PREVIEW */}
+                {/* PREVIEW */}
                 {preview && (
                   <div className="mt-4">
                     <label>Preview</label>
@@ -154,18 +199,17 @@ function ServiceCategoryInput() {
                   </div>
                 )}
 
-                {/* ACTIVE STATUS */}
+                {/* STATUS */}
                 <div className="mt-4 col-md-4">
                   <label>Status</label>
                   <select
                     className="form-control mt-2"
-                    name="ActiveStatus"
-                    value={serviceCategory.ActiveStatus}
+                    value={serviceCategory.status}
                     onChange={(e) =>
-                      setServiceCategory({
-                        ...serviceCategory,
-                        ActiveStatus: e.target.value === "true",
-                      })
+                      setServiceCategory((prev) => ({
+                        ...prev,
+                        status: e.target.value === "true",
+                      }))
                     }
                   >
                     <option value="true">Active</option>
@@ -175,21 +219,27 @@ function ServiceCategoryInput() {
 
                 {/* BUTTONS */}
                 <div className="mt-4">
-                  <button className="btn btn-primary">
-                    Save Service
+                  <button
+                    className="btn btn-primary"
+                    disabled={mutation.isPending}
+                  >
+                    {mutation.isPending
+                      ? "Adding..."
+                      : "Save Service Category"}
                   </button>
+
                   <button
                     type="reset"
                     className="btn btn-light ms-2"
-                    onClick={() =>
+                    onClick={() => {
                       setServiceCategory({
                         name: "",
-                        image: "",
                         adminId: admin._id,
-                        ActiveStatus: true,
-                        timestamp: "",
-                      })
-                    }
+                        status: "Active",
+                      });
+                      setSelectFile(null);
+                      setPreview(null);
+                    }}
                   >
                     Reset
                   </button>

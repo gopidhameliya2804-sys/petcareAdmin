@@ -67,20 +67,20 @@ function Sidebar() {
                 <img src="/assets/images/logo/logo.png" alt="Logo" />
               </a>
             </div>
-           <div className="d-flex align-items-center">
-  <div className="toggler me-3">
-    <button
-      onClick={toggleSidebar}
-      className="sidebar-hide d-xl-none d-block"
-    >
-      <i className="bi bi-x"></i>
-    </button>
-  </div>
+            <div className="d-flex align-items-center">
+              <div className="toggler me-4">
+                <button
+                  onClick={toggleSidebar}
+                  className="sidebar-hide d-xl-none d-block"
+                >
+                  <i className="bi bi-x"></i>
+                </button>
+              </div>
 
-  <div>
-    <h6 className="mb-0">Welcome, {adminDetails.name}</h6>
-  </div>
-</div>
+              <div>
+                <h6 className="mb-0">Welcome, {adminDetails.name}</h6>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -161,11 +161,11 @@ function Sidebar() {
               </Link>
             </li>
 
-            {/* Adoption Inquiry */}
+            {/* Inquiry */}
             <li className="sidebar-item">
-              <Link to="/manage-adoptioninquiry" className="sidebar-link">
+              <Link to="/manage-inquiry" className="sidebar-link">
                 <i className="bi bi-chat-left-text-fill"></i>
-                <span>Manage Adoption Inquiry</span>
+                <span>Manage Inquiry</span>
               </Link>
             </li>
 
@@ -174,22 +174,6 @@ function Sidebar() {
               <Link to="/manage-feedback" className="sidebar-link">
                 <i className="bi bi-chat-square-text-fill"></i>
                 <span>Manage Feedback</span>
-              </Link>
-            </li>
-
-            {/* Inquiry */}
-            <li className="sidebar-item">
-              <Link to="/manage-inquiry" className="sidebar-link">
-                <i className="bi bi-envelope-fill"></i>
-                <span>Manage Inquiry</span>
-              </Link>
-            </li>
-
-            {/* Reviews */}
-            <li className="sidebar-item">
-              <Link to="/manage-review" className="sidebar-link">
-                <i className="bi bi-star-fill"></i>
-                <span>Manage Reviews</span>
               </Link>
             </li>
             {/* COMPONENTS */}

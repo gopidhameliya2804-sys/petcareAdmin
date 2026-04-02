@@ -4,25 +4,26 @@ import api from "../utils/Axios.config";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
+import { useQuery } from "@tanstack/react-query";
 
 function ManageInquiry() {
-  const [inquiries, setInquiries] = useState([]);
+  // const [inquiries, setInquiries] = useState([]);
   const navigate =  useNavigate(); 
 
   const FetchInquiry = async () => {
     try {
       let response = await api.get("/admin/inquiry/");
       console.log(response.data);
-      setInquiries(response.data.data);
-      navigate("/manage-inquiry")
+      return response.data.data;
     } catch (e) {
       console.log(e);
     }
   }
 
-  useEffect(() => {
-    FetchInquiry();
-  },[]);
+  const {data : inquiries = [] , isLoading , isError} = useQuery({
+    queryKey: ["inquiries"],
+    queryFn: FetchInquiry,
+  });
 
   const DeleteInquiry = async (id) => {
     try {
@@ -35,8 +36,6 @@ function ManageInquiry() {
   }
 
   const total = inquiries.length;
-  const visible = inquiries.filter(f => f.status === "Actibe").length;
-  const hidden = inquiries.filter(f => f.status === "Inactive").length;
 
   return (
     <div id="app">
@@ -62,22 +61,6 @@ function ManageInquiry() {
                 </div>
               </div>
             </div>
-            {/* <div className="col-md-4">
-              <div className="card shadow-sm border-start border-warning border-4">
-                <div className="card-body">
-                  <h6 className="text-muted">New</h6>
-                  <h4 className="text-warning">{newCount}</h4>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-4">
-              <div className="card shadow-sm border-start border-success border-4">
-                <div className="card-body">
-                  <h6 className="text-muted">Replied</h6>
-                  <h4 className="text-success">{replied}</h4>
-                </div>
-              </div>
-            </div> */}
           </div>
         </section>
 
@@ -85,6 +68,7 @@ function ManageInquiry() {
         <section className="section mt-4">
           <div className="card shadow-sm">
             <div className="card-body table-responsive">
+              {isLoading ? (<p>Loading Inquiry Data...</p>) : (<>
               <table className="table table-hover align-middle">
                 <thead className="table-light">
                   <tr>
@@ -123,7 +107,7 @@ function ManageInquiry() {
                           <button
                             className="btn btn-sm btn-outline-primary"
                             onClick={() => {DeleteInquiry(inquiry._id)}}
-                          >
+                            >
                             <i className="bi bi-trash"></i>
                           </button>
                         </div>
@@ -132,6 +116,7 @@ function ManageInquiry() {
                   ))}
                 </tbody>
               </table>
+              </>)}
             </div>
           </div>
         </section>

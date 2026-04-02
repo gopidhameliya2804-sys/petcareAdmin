@@ -99,59 +99,6 @@ function Header() {
       {/* End Hidden Bar */}
       <header className="main-header header-style-two">
         <div>
-          {/*Start Header Top*/}
-          {/* <div className="header-top">
-            <div className="outer-container">
-              <div className="outer-box clearfix">
-                <div className="header-top-left pull-left">
-                  <div className="header-contact-info">
-                    <ul>
-                      <li>
-                        <span className="icon-envelope" />
-                        <a href="#">happypawsgrooming@gmail.com</a>
-                      </li>
-                      <li>
-                        <span className="icon-phone-call" />
-                        <a href="tel:123456789">+098987 876 767</a>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-                <div className="header-top-right pull-right">
-                  <div className="header-social-link">
-                    <ul>
-                      <li>
-                        <a href="#">
-                          <i className="fa fa-facebook" aria-hidden="true" />
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#">
-                          <i className="fa fa-twitter" aria-hidden="true" />
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#">
-                          <i className="fa fa-linkedin" aria-hidden="true" />
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#">
-                          <i className="fa fa-behance" aria-hidden="true" />
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#">
-                          <i className="fa fa-pinterest" aria-hidden="true" />
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div> */}
-          {/*End header Top*/}
           <div className="header">
             <div className="outer-container">
               <div className="outer-box clearfix">
@@ -209,7 +156,7 @@ function Header() {
                                 <Link to="#">Pages</Link>
                                 <ul>
                                   <li>
-                                    <Link to="/inquiry">Inquiry</Link>
+                                    <Link to="/inquiry">Inquiry Center</Link>
                                   </li>
                                   <li>
                                     <Link to="/pet-feedback">Feedback</Link>
@@ -290,28 +237,6 @@ function Header() {
                       </div>
                     </>
                   )}
-                  {/* <div className="hidden-content-button bar-box">
-                    <a
-                      className="side-nav-toggler nav-toggler hidden-bar-opener"
-                      href="#"
-                    >
-                      <ul>
-                        <li className="red2" />
-                        <li className="red2" />
-                        <li />
-                      </ul>
-                      <ul>
-                        <li />
-                        <li />
-                        <li />
-                      </ul>
-                      <ul>
-                        <li className="red2" />
-                        <li />
-                        <li className="red2" />
-                      </ul>
-                    </a>
-                  </div> */}
                 </div>
                 {/*End Header Right*/}
               </div>
@@ -371,7 +296,7 @@ function Header() {
                             <Link to="#">Pages</Link>
                             <ul>
                               <li>
-                                <Link to="/inquiry">Inquiry</Link>
+                                <Link to="/inquiry">Inquiry Center</Link>
                               </li>
                               <li>
                                 <Link to="/pet-feedback">Feedback</Link>

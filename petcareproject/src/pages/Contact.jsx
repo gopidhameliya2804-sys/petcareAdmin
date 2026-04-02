@@ -3,6 +3,7 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import BreadCrumbs from "../comman/BreadCrumbs";
 import api from "../utils/AxiosConfig";
 import { toast } from "react-toastify";
+import { useMutation } from "@tanstack/react-query";
 
 function Contact() {
   const navigate = useNavigate();
@@ -23,13 +24,15 @@ function Contact() {
     }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const addinquiry = async (inquiry) => {
+    let response = await api.post("/user/inquiry/addinquiry", inquiry);
+    return response.data;
+  }
 
-    try {
-      let response = await api.post("/user/inquiry/addinquiry", inquiry);
-      console.log(response.data);
-      setInquiry(response.data.data);
+  const mutation = useMutation({
+    mutationFn: addinquiry,
+
+    onSuccess: () => {
       toast.success("Inquiry submited successfully" , {onClick: () => { navigate("/")}});
       setInquiry({
         name: "",
@@ -38,10 +41,17 @@ function Contact() {
         subject: "",
         message: "",
       });
-    } catch (e) {
-      console.log(e);
+    },
+    onError: () => {
       toast.error("Something went wrong");
     }
+
+  })
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    mutation.mutate(inquiry);
   };
 
   // console.log(inquiry);
@@ -267,11 +277,12 @@ function Contact() {
                           <button
                             className="btn-one gradient-bg-1"
                             type="submit"
+                            disabled={mutation.isPending}
                             data-loading-text="Please wait..."
                           >
                             <span className="txt">
                               <i className="icon-send" />
-                              Submit Now
+                             {mutation.isPending ? "Submitting..." : " Submit Now"}
                             </span>
                           </button>
                         </div>

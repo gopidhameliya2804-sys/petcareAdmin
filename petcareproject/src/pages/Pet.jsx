@@ -59,7 +59,7 @@ function Pet() {
                       <div
                         className="col-xl-4 col-lg-6 col-md-6"
                       >
-                        <div className="single-blog-style1">
+                        <div className="single-blog-style1" >
                           <div className="img-holder">
                             <div className="inner">
                               <img
@@ -69,7 +69,7 @@ function Pet() {
                               />
                             </div>
                           </div>
-                          <div className="text-holder">
+                          <div className="text-holder" style={{height:"230px"}}>
                             <ul className="meta-info">
                               <li>
                                 <span className="icon-pawprint" />

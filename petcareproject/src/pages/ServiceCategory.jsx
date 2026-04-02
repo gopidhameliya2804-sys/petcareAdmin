@@ -67,7 +67,7 @@ function ServiceCategory() {
                               />
                             </div>
                           </div>
-                          <div className="text-holder">
+                          <div className="text-holder" style={{height:"230px"}}>
                             <h3>
                               <a href="#">{value.name}</a>
                             </h3>

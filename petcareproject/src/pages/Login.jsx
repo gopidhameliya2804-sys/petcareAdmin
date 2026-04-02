@@ -1,12 +1,13 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import cookie from "js-cookie";
 import axios from "axios";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 import BreadCrumbs from "../comman/BreadCrumbs";
+import { useMutation } from "@tanstack/react-query";
 
 function Login() {
-  let [loading , setLoading] = useState(false);
+  const navigate = useNavigate();
   let [user, setUser] = useState({
     email: "",
     password: "",
@@ -20,35 +21,41 @@ function Login() {
     }));
   }
 
-  async function handleSubmit(e) {
-    e.preventDefault();
-    setLoading(true);
+  const addUser = async (user) => {
+    let response = await axios.post(
+      `${import.meta.env.VITE_API_URL}/auth/signin`,
+      user,
+    );
+    return response.data;
+  };
 
-    try {
-      let response = await axios.post(
-       "https://petcarebackend-wzcq.onrender.com/api/auth/signin",
-        user,
-      );
-      if (response.data.token != "") {
-        cookie.set("token", response.data.token);
+  const mutation = useMutation({
+    mutationFn: addUser,
+
+    onSuccess: (response) => {
+      if (response.token) {
+      cookie.set("token", response.token);
 
         setUser({
           email: "",
           password: "",
         });
-        toast.success("Login Successful", {onClose:()=>{
-        window.location.href = "/";}});
+        toast.success("Login Successful", {
+          onClose: () => {
+            window.location.href = "/";
+          },
+        });
       }
-    } catch (e) {
-      setUser({
-        email: "",
-        password: "",
-      });
+    },
+    onError: () => {
       toast.error("Invlalid Details");
-      // window.location.href = "/login";
-    }finally {
-      setLoading(false);
     }
+  });
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+     
+    mutation.mutate(user);
   }
 
   return (
@@ -124,7 +131,7 @@ function Login() {
                   <div className="row justify-content-center">
                     <div className="col-xl-4 text-end">
                       <div className="forgot-password">
-                        <Link to="/forgot-password" >Forgot Password?</Link>
+                        <Link to="/forgot-password">Forgot Password?</Link>
                       </div>
                     </div>
                   </div>
@@ -135,10 +142,9 @@ function Login() {
                         <input
                           type="submit"
                           className="btn-one gradient-bg-1"
-                          disabled={loading}
-                          value={loading ? "Wait for Loading..." : "Loading Now"}
+                          disabled={mutation.isPending}
+                          value={mutation.isPending ? "loggining..." : "Login Now"}
                         />
-                    
 
                         <h6 className="mt-3">
                           Have not an account ?

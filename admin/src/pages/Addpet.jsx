@@ -1,22 +1,24 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Sidebar from "../common/Sidebar";
 import Footer from "../common/Footer";
 import api from "../utils/Axios.config";
 import cookie from "js-cookie";
 import { toast } from "react-toastify";
+import { useMutation } from "@tanstack/react-query";
 
 function PetInput() {
   const [categories, setCategories] = useState([]);
   const [preview, setPreview] = useState(null);
+  const navigate = useNavigate();
   const [selectFile, setSelectFile] = useState(null);
+
   const [pet, setPet] = useState({
     pet_cate_id: "",
     name: "",
-    image: "",
     desc: "",
     age: "",
     status: "Available",
-    timestamp:new Date(),
   });
 
   const FetchCategories = async () => {
@@ -27,6 +29,7 @@ function PetInput() {
       console.log(err);
     }
   };
+
   useEffect(() => {
     FetchCategories();
   }, []);
@@ -41,48 +44,69 @@ function PetInput() {
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
+    if (!file) return;
+
     setSelectFile(file);
     setPreview(URL.createObjectURL(file));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const addPet = async ({ pet, selectFile }) => {
+    const formData = new FormData();
 
-    const payload = {
-      ...pet,
-      timestamp: new Date(),
-    };
+    formData.append("pet_cate_id", pet.pet_cate_id);
+    formData.append("name", pet.name);
+    formData.append("desc", pet.desc);
+    formData.append("age", pet.age);
+    formData.append("status", pet.status);
+    formData.append("timestamp", new Date());
 
-    try {
-      const formData = new FormData();
-      formData.append("pet_cate_id", pet.pet_cate_id); 
-      formData.append("name", pet.name);
+    if (selectFile) {
       formData.append("image", selectFile);
-      formData.append("desc", pet.desc);
-      formData.append("age", pet.age);
-      formData.append("status", pet.status);
-      formData.append("timestamp", new Date());
+    }
 
-      const response = await api.post("/admin/pet/addpet", formData);
-      if (response.data.token) {
-        cookie.set("token", response.data.token);
+    const response = await api.post("/admin/pet/addpet", formData);
+    return response.data;
+  };
+
+  const mutation = useMutation({
+    mutationFn: addPet,
+
+    onSuccess: (response) => {
+      if (response.token) {
+        cookie.set("token", response.token);
       }
 
-      toast.success("Pet Added Successfully", {onClose: () => {window.location.href = "/manage-pet"}});
+      toast.success("Pet Added Successfully", {
+        onClose: () => navigate("/manage-pet"),
+      });
 
       setPet({
         pet_cate_id: "",
         name: "",
-        image: "",
         desc: "",
         age: "",
         status: "Available",
-        timestamp:"",
       });
-    } catch (err) {
-      console.error(err);
+
+      setSelectFile(null);
+      setPreview(null);
+    },
+
+    onError: (error) => {
+      console.log(error);
       toast.error("Failed to add pet");
+    },
+  });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (!selectFile) {
+      toast.error("Please select an image");
+      return;
     }
+
+    mutation.mutate({ pet, selectFile });
   };
 
   return (
@@ -104,9 +128,8 @@ function PetInput() {
             </div>
 
             <div className="card-body">
-              <form onSubmit={handleSubmit} encType="multipart/form-data">
+              <form onSubmit={handleSubmit}>
                 <div className="row">
-                  {/* CATEGORY */}
                   <div className="col-md-6">
                     <label>Pet Category</label>
                     <select
@@ -125,7 +148,6 @@ function PetInput() {
                     </select>
                   </div>
 
-                  {/* PET NAME */}
                   <div className="col-md-6">
                     <label>Pet Name</label>
                     <input
@@ -140,7 +162,6 @@ function PetInput() {
                 </div>
 
                 <div className="row mt-3">
-                  {/* AGE */}
                   <div className="col-md-4">
                     <label>Age</label>
                     <input
@@ -152,7 +173,6 @@ function PetInput() {
                     />
                   </div>
 
-                  {/* STATUS */}
                   <div className="col-md-4">
                     <label>Status</label>
                     <select
@@ -167,7 +187,6 @@ function PetInput() {
                   </div>
                 </div>
 
-                {/* DESCRIPTION */}
                 <div className="mt-3">
                   <label>Description</label>
                   <textarea
@@ -179,19 +198,16 @@ function PetInput() {
                   />
                 </div>
 
-                {/* IMAGE */}
                 <div className="mt-3">
-                  <label>Image URL</label>
+                  <label>Image</label>
                   <input
                     type="file"
-                    name="image"
                     accept="image/*"
                     className="form-control mt-2"
                     onChange={handleFileChange}
                   />
                 </div>
 
-                {/* IMAGE PREVIEW */}
                 {preview && (
                   <div className="mt-3">
                     <img
@@ -207,25 +223,28 @@ function PetInput() {
                   </div>
                 )}
 
-                {/* BUTTONS */}
                 <div className="mt-4">
-                  <button className="btn btn-primary">
-                    Save Pet
+                  <button
+                    className="btn btn-primary"
+                    disabled={mutation.isPending}
+                  >
+                    {mutation.isPending ? "Adding..." : "Save Pet"}
                   </button>
+
                   <button
                     type="reset"
                     className="btn btn-light ms-2"
-                    onClick={() =>
+                    onClick={() => {
                       setPet({
                         pet_cate_id: "",
                         name: "",
-                        image: "",
                         desc: "",
                         age: "",
                         status: "Available",
-                        ActiveStatus: true,
-                      })
-                    }
+                      });
+                      setSelectFile(null);
+                      setPreview(null);
+                    }}
                   >
                     Reset
                   </button>

@@ -2,24 +2,25 @@ import React, { useEffect, useState } from "react";
 import Sidebar from "../common/Sidebar";
 import api from "../utils/Axios.config";
 import { toast } from "react-toastify";
+import { useQuery } from "@tanstack/react-query";
 
 function ManageAdoptionPets() {
-  const [pets, setPets] = useState([]);
+  // const [pets, setPets] = useState([]);
 
   const FetchAdoptPets = async () => {
     try {
       let response = await api.get("/admin/adoption/all");
       // console.log(response.data);
-      setPets(response.data.data);
+      return response.data.data;
     } catch (e) {
       console.log(e);
     }
   };
 
-  useEffect(() => {
-    FetchAdoptPets();
-  }, []);
-
+ const {data : pets = [] , isLoading , isError} = useQuery({
+    queryKey: ["pets"],
+    queryFn: FetchAdoptPets,
+  });
   const DeleteAdoption = async (id) => {
    try {
       let response = await api.delete(`/admin/adoption/delete/${id}`);
@@ -31,7 +32,6 @@ function ManageAdoptionPets() {
       console.log(e);
     }
   }
-  // console.log(pets);
 
   const total = pets.length;
   const Approved = pets.filter(p => p.adop_status === "APPROVED").length;
@@ -88,11 +88,13 @@ function ManageAdoptionPets() {
         <section className="section mt-4">
           <div className="card shadow-sm">
             <div className="card-body table-responsive">
+              {isLoading ? (<p>Loading Adoped pets data...</p>) : (<>
               <table className="table table-hover align-middle">
                 <thead className="table-light">
                   <tr>
                     <th>User</th>
                     <th>Pet</th>
+                    <th>Image</th>
                     <th>Age</th>
                     <th>Reason</th>
                     <th>Price</th>
@@ -119,7 +121,25 @@ function ManageAdoptionPets() {
                         </div>
                       </td>
 
-                      {/* Age */}
+                      {/* Image */}
+                      <td>
+                          {item.pet_image ? (
+                            <img
+                            src={`${api.defaults.baseURL}/uploads/${item.pet_image}`}
+                            alt={item.pet_name}
+                            style={{
+                              width: "60px",
+                              height: "60px",
+                                objectFit: "cover",
+                                borderRadius: "8px",
+                              }}
+                              />
+                          ) : (
+                            <span className="text-muted">No Image</span>
+                          )}
+                        </td>
+
+                        {/* Age */}
                       <td>{item.pet_age}</td>
 
                       {/* Reason */}
@@ -141,7 +161,7 @@ function ManageAdoptionPets() {
                                 ? "bg-light-success text-success"
                                 : "bg-light-danger text-danger"
                           }`}
-                        >
+                          >
                           {item.adop_status}
                         </span>
                       </td>
@@ -161,6 +181,7 @@ function ManageAdoptionPets() {
                   ))}
                 </tbody>
               </table>
+              </>)}
             </div>
           </div>
         </section>

@@ -3,12 +3,12 @@ import BreadCrumbs from "../comman/BreadCrumbs";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import api from "../utils/AxiosConfig";
 import { toast } from "react-toastify";
+import { useMutation } from "@tanstack/react-query";
 
 function PetAdoption() {
+  const navigate = useNavigate();
   const petadata = useLocation().state;
   const [pet , setPet] = useState(petadata);
-  // console.log(pet);
-  const navigate = useNavigate();
   const [petadopt, setPetAdopt] = useState({
     adop_reason: "",
   });
@@ -21,21 +21,37 @@ function PetAdoption() {
     }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    try {
-      await api.post("/user/adoption/petadoption", {
+  const addPetAdopt = async (petadopt) => {
+    const response = await api.post("/user/adoption/petadoption", {
         pet_id: pet._id,
         ...petadopt,
       });
+    return response.data;
+  }
 
-      toast.success("Adoption request submitted successfully" , {onClick: () => { navigate("/adopt")}});
-    } catch (e) {
-      console.log(e);
+  const mutation = useMutation({
+    mutationFn: addPetAdopt,
+    onSuccess: () => {
+      toast.success("Adoption request submitted successfully" , {
+        onClick: () => { navigate("/adopt")}
+      });
+
+      setPetAdopt({
+        adop_reason:"",
+      });
+    },
+    onError: () => {
       toast.error("Something went wrong");
-    }
+    },
+  })
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    mutation.mutate(petadopt);
   };
+
+
   return (
     <div>
       <BreadCrumbs
@@ -114,10 +130,10 @@ function PetAdoption() {
                   <div className="row">
                     <div className="col-xl-12">
                       <div className="button-box text-center">
-                        <button className="btn-one gradient-bg-1" type="submit">
+                        <button className="btn-one gradient-bg-1" type="submit" disabled={mutation.isPending}>
                           <span className="txt">
                             <i className="icon-send" />
-                            Submit Adoption Request
+                            {mutation.isPending ? "Submitting" : "Submit Adoption Request"}
                           </span>
                         </button>
                       </div>

@@ -37,7 +37,7 @@ let Feedback = require("./routes/admin/feedback.route");
 app.use(cookieParser());
 app.use(express.json());
 app.use(cors({
-    origin:[ "https://petcareadmin.onrender.com", "https://petcareuser.onrender.com" , "http://localhost:5173"],
+    origin:[ "https://petcareadmin.onrender.com", "https://petcareuser.onrender.com" , "http://localhost:5173", "http://localhost:5174"],
     methods: ["GET" , "POST" , "PUT" ,"DELETE"],
     credentials: true
 }))
@@ -70,7 +70,7 @@ app.use("/api/admin/service" , Service);
 app.use("/api/admin/adoption" , Adoption);
 app.use("/api/admin/booking" , Booking);
 app.use("/api/admin/inquiry" , Inquiry);
-app.use("/api/admin/paymeny" , Payment);
+// app.use("/api/admin/paymeny" , Payment);
 app.use("/api/admin/feedback" , Feedback);
 
 module.exports = app;

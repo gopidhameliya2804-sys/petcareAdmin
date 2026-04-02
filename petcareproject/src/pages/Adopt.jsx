@@ -11,16 +11,16 @@ function AdoptPets() {
 
   const FetchAdotedPets = async () => {
     try {
-      let responsive = await api.get("/user/adoption/all");
-      console.log(responsive.data.data);
-      return responsive.data.data;
+      let response = await api.get("/user/adoption/all");
+      console.log("data:" , response.data);
+      return response.data.data;
     } catch (e) {
       console.log(e);
     }
   };
 
-  const { data:adoptedPets, isLoading, isError, error } = useQuery({
-    queryKey: ["adoptedPets"],
+  const { data:adoptedPet, isLoading, isError, error } = useQuery({
+    queryKey: ["adoptedPet"],
     queryFn: FetchAdotedPets,
   });
 
@@ -39,7 +39,7 @@ function AdoptPets() {
         <section id="blog-area" className="blog-grid-area">
           <div className="container">
             <div className="row">
-              {adoptedPets.map((item) => (
+              {adoptedPet?.map((item) => (
                 <div
                   className="col-xl-4 col-lg-6 col-md-6"
                   key={item._id}
@@ -50,7 +50,7 @@ function AdoptPets() {
                     <div className="img-holder">
                       <div className="inner">
                         <img
-                          src={`${api.defaults.baseURL}/uploads/${item.image}`}
+                          src={`${api.defaults.baseURL}/uploads/${item.pet_image}`}
                           alt={item.pet_name}
                           style={{ height: "300px" }}
                         />
@@ -74,7 +74,7 @@ function AdoptPets() {
                     </div>
 
                     {/* Content */}
-                    <div className="text-holder">
+                    <div className="text-holder" style={{height:"230px"}}>
                       <h3 className="blog-title">
                         {item.pet_name}
                         <span className="round-box zoominout" />

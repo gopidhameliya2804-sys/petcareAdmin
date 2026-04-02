@@ -25,7 +25,7 @@ function Login() {
     e.preventDefault();
 
     try {
-      let response = await axios.post("https://petcarebackend-wzcq.onrender.com/api/auth/signin", admin);
+      let response = await axios.post(`${import.meta.env.VITE_API_URL}/auth/signin`, admin);
       console.log(response.data);
       let token = response.data.token;
       if (token) {

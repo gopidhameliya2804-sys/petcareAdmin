@@ -4,31 +4,35 @@ import { useEffect } from "react";
 import api from "../utils/Axios.config";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useQuery } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 
 function ManagePets() {
-  const [pet, setPet] = useState([]);
+  // const [pet, setPet] = useState([]);
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
 
   const FetchPet = async () => {
     try {
       const response = await api.get("/admin/pet/");
       console.log(response.data);
-      setPet(response.data.data || []);
+      return response.data.data;
     } catch (err) {
       console.error(err);
     }
   };
 
-  useEffect(() => {
-    FetchPet();
-  }, []);
+ const {data : pet = [] ,isLoading , isError} = useQuery({
+    queryKey: ["pet"],
+    queryFn: FetchPet,
+  });
 
   const DeletePet = async (id) => {
     try {
       let response = await api.delete(`/admin/pet/delete/${id}`);
       if (response.status == 200) {
         toast.success("Delete Pet");
-        FetchPet();
+        queryClient.invalidateQueries({ queryKey: ["pet"]});
         navigate("/manage-pet")
       }
     } catch (e) {
@@ -99,6 +103,7 @@ function ManagePets() {
         <section className="section mt-4">
           <div className="card shadow-sm">
             <div className="card-body table-responsive">
+              {isLoading ? (<p>Loading pets Data...</p>) : (<>
               <table className="table table-striped align-middle">
                 <thead className="table-light">
                   <tr>
@@ -132,15 +137,15 @@ function ManagePets() {
                         <td>
                           {value.image ? (
                             <img
-                              src={`${api.defaults.baseURL}/uploads/${value.image}`}
-                              alt={value.name}
-                              style={{
-                                width: "60px",
-                                height: "60px",
+                            src={`${api.defaults.baseURL}/uploads/${value.image}`}
+                            alt={value.name}
+                            style={{
+                              width: "60px",
+                              height: "60px",
                                 objectFit: "cover",
                                 borderRadius: "8px",
                               }}
-                            />
+                              />
                           ) : (
                             <span className="text-muted">No Image</span>
                           )}
@@ -179,6 +184,7 @@ function ManagePets() {
                   )}
                 </tbody>
               </table>
+              </>)}
             </div>
           </div>
         </section>

@@ -3,31 +3,35 @@ import Sidebar from "../common/Sidebar";
 import api from "../utils/Axios.config";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useQuery } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 
 function ManagePetCategories() {
-  const [petcategory, setPetCategory] = useState([]);
+  // const [petcategory, setPetCategory] = useState([]);
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
 
   const FetchPetCategory = async () => {
     try {
       const response = await api.get("/admin/petcategory/");
       console.log(response.data);
-      setPetCategory(response.data.data || []);
+      return response.data.data;
     } catch (err) {
       console.error(err);
     }
   };
 
-  useEffect(() => {
-    FetchPetCategory();
-  }, []);
+  const {data : petcategory = [] , isLoading , isError} = useQuery({
+    queryKey: ["petcategory"],
+    queryFn: FetchPetCategory,
+  });
 
   const DeletePetCategory = async (id) => {
     try {
       let response = await api.delete(`/admin/petcategory/delete/${id}`);
       if (response.status == 200) {
         toast.success("Delete Pet Category");
-        FetchPetCategory();
+        queryClient.invalidateQueries({ queryKey: ["petcategory"]});
       }
     } catch (e) {
       console.log(e);
@@ -101,6 +105,7 @@ function ManagePetCategories() {
         <section className="section mt-4">
           <div className="card shadow-sm">
             <div className="card-body table-responsive">
+              {isLoading ? (<p>Loading Pet Category Data...</p>) : (<>
               <table className="table table-striped align-middle">
                 <thead className="table-light">
                   <tr>
@@ -127,17 +132,17 @@ function ManagePetCategories() {
                         <td>
                           {value.image ? (
                             <img
-                              src={`${api.defaults.baseURL}/uploads/${value.image}`}
-                              alt={value.name}
-                              style={{
-                                width: "60px",
-                                height: "60px",
-                                objectFit: "cover",
-                                borderRadius: "8px",
+                            src={`${api.defaults.baseURL}/uploads/${value.image}`}
+                            alt={value.name}
+                            style={{
+                              width: "60px",
+                              height: "60px",
+                              objectFit: "cover",
+                              borderRadius: "8px",
                               }}
-                            />
-                          ) : (
-                            "No Image"
+                              />
+                            ) : (
+                              "No Image"
                           )}
                         </td>
                         <td>
@@ -147,7 +152,7 @@ function ManagePetCategories() {
                                 ? "bg-success"
                                 : "bg-danger"
                             }`}
-                          >
+                            >
                             {value.status || "Active"}
                           </span>
                         </td>
@@ -165,6 +170,7 @@ function ManagePetCategories() {
                   )}
                 </tbody>
               </table>
+              </>)}
             </div>
           </div>
         </section>

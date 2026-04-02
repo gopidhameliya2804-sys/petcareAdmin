@@ -47,7 +47,7 @@ function ServiceDetails() {
                     data-wow-duration="1500ms"
                   >
                     <div className="img-holder">
-                      <img src={servicedetails.image} className="style3" style={{height:"400px" , width:"100%"}}></img>
+                      <img src={`${api.defaults.baseURL}/uploads/${servicedetails.image}`} className="style3" style={{height:"400px" , width:"100%"}}></img>
                     </div>
                     <div className="text-holder">
                       {/* Category */}

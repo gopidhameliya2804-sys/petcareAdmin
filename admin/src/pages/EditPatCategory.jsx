@@ -35,6 +35,7 @@ function EditPetCategory() {
     setPreview(URL.createObjectURL(file));
   };
 
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
 

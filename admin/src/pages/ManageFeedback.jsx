@@ -3,23 +3,25 @@ import Sidebar from "../common/Sidebar";
 import api from "../utils/Axios.config";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
+import { useQuery } from "@tanstack/react-query";
 
 function ManageFeedback() {
-  const [ feedbacks , setFeedbacks] = useState([]);
+  // const [ feedbacks , setFeedbacks] = useState([]);
 
   const FetchFeedback = async () => {
     try {
       let response = await api.get("/admin/feedback/");
       console.log(response.data);
-      setFeedbacks(response.data.data);
+      return response.data.data;
     } catch (e) {
       console.log(e);
     }
   }
 
-  useEffect(() => {
-    FetchFeedback();
-  }, []);
+  const {data : feedbacks = [] , isLoading , isError} = useQuery({
+    queryKey: ["feedbacks"],
+    queryFn: FetchFeedback,
+  });
 
   const DeleteFeedback = async (id) => {
     try {
@@ -57,22 +59,6 @@ function ManageFeedback() {
                 </div>
               </div>
             </div>
-            {/* <div className="col-md-4">
-              <div className="card shadow-sm border-start border-success border-4">
-                <div className="card-body">
-                  <h6 className="text-muted">Visible</h6>
-                  <h4 className="text-success">{visible}</h4>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-4">
-              <div className="card shadow-sm border-start border-danger border-4">
-                <div className="card-body">
-                  <h6 className="text-muted">Hidden</h6>
-                  <h4 className="text-danger">{hidden}</h4>
-                </div>
-              </div>
-            </div> */}
           </div>
         </section>
 
@@ -80,6 +66,7 @@ function ManageFeedback() {
         <section className="section mt-4">
           <div className="card shadow-sm">
             <div className="card-body table-responsive">
+              {isLoading ? (<p>Loading Feedback Data...</p>): (<>
               <table className="table table-hover align-middle">
                 <thead className="table-light">
                   <tr>
@@ -100,14 +87,14 @@ function ManageFeedback() {
                       <td>
                         {Array.from({ length: 5 }).map((_, i) => (
                           <i
-                            key={i}
-                            className={`bi ${
-                              i < value.rating
-                                ? "bi-star-fill text-warning"
-                                : "bi-star text-muted"
+                          key={i}
+                          className={`bi ${
+                            i < value.rating
+                            ? "bi-star-fill text-warning"
+                            : "bi-star text-muted"
                             }`}
-                          ></i>
-                        ))}
+                            ></i>
+                          ))}
                       </td>
 
                       <td className="text-muted">
@@ -128,6 +115,7 @@ function ManageFeedback() {
                   ))}
                 </tbody>
               </table>
+              </>)}
             </div>
           </div>
         </section>

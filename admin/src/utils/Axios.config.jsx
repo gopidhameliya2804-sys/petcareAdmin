@@ -3,7 +3,7 @@ import CheckToken from "./CheckToken";
 import { LogoutWithoutNotification } from "./Logout";
 
 let api = axios.create({
-  baseURL: "https://petcarebackend-wzcq.onrender.com/api",
+  baseURL: import.meta.env.VITE_API_URL,
 });
 
 api.interceptors.request.use((config) => {

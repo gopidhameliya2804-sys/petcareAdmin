@@ -40,7 +40,7 @@ function App() {
   
   return (
     <>
-      <ToastContainer  position='top-right' autoClose="2000" theme='colored' style={{zIndex:"999999"}} />
+      <ToastContainer  position='top-right' autoClose="1200" theme='colored' style={{zIndex:"999999"}} />
       <BrowserRouter>
         {/* <Header /> */}
         <Routes>
