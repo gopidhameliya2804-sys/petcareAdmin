@@ -876,8 +876,8 @@ function Index() {
                   )}
                   {isLoading ? (
                     <p>User Feedabck Loading...</p>
-                  ) : feedbacks.length > 1 ? (
-                    feedbacks.slice(0, 2).map((value) => {
+                  ) : feedbacks?.length > 1 ? (
+                    feedbacks?.slice(0, 2).map((value) => {
                       return (
                         <>
                           <div className="single-testimonial-style1 no-image mt-4">
