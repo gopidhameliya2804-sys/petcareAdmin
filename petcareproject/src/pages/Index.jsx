@@ -47,7 +47,7 @@ function Index() {
     try {
       let response = await api.get("/user/feedback");
       console.log(response.data.data);
-      return response.data.data.slice(0, 2);
+      return response.data.data;
     } catch (e) {
       console.log(e);
     }
@@ -499,60 +499,6 @@ function Index() {
           </div>
         </section>
         {/* End Service Style1 Area */}
-        {/*Start Video Gallery Area*/}
-        {/* <section className="video-gallery-area">
-          <div className="container-fullwidth">
-            <div className="row">
-              <div className="col-xl-6">
-                <div className="video-gallery-content-box text-center">
-                  <img
-                    src="assets/images/resources/video-gallery-image.png"
-                    alt="Pet Food & Products"
-                  />
-                  <h2>
-                    Get Every Pet
-                    <br /> Food &amp; Toods Here
-                  </h2>
-                  <p>
-                    Discover a wide range of pet foods, accessories, and care
-                    products to keep your furry friends happy and healthy.
-                    Quality products for every pet, delivered with love.
-                  </p>
-                  <div className="button">
-                    <Link className="btn-one" to="shop">
-                      <i className="fa fa-shopping-cart" aria-hidden="true" />
-                      <span className="txt">Shop Now</span>
-                    </Link>
-                  </div>
-                </div>
-              </div>
-              <div className="col-xl-6">
-                <div
-                  className="video-holder-box text-center"
-                  style={{
-                    backgroundImage:
-                      "url(assets/images/resources/video-gallery-bg.jpg)",
-                  }}
-                >
-                  <div
-                    className="icon wow zoomIn"
-                    data-wow-delay="300ms"
-                    data-wow-duration="1500ms"
-                  >
-                    <a
-                      className="video-popup thm-bgclr"
-                      title="Watch CarePress Video"
-                      href="https://www.youtube.com/watch?v=p25gICT63ek"
-                    >
-                      <span className="icon-play-button" />
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section> */}
-        {/*End Video Gallery Area*/}
         {/*Start Feautres Area*/}
         <section className="feautres-area">
           <div className="container">
@@ -931,7 +877,7 @@ function Index() {
                   {isLoading ? (
                     <p>User Feedabck Loading...</p>
                   ) : feedbacks.length > 1 ? (
-                    feedbacks.map((value) => {
+                    feedbacks.slice(0, 2).map((value) => {
                       return (
                         <>
                           <div className="single-testimonial-style1 no-image mt-4">
