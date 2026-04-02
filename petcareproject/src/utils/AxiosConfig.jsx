@@ -4,7 +4,7 @@ import { LogoutWithoutNotification } from "./Logout";
 
 
 let api = axios.create({
-    baseURL: import.meta.env.VITE_API_URL,
+    baseURL: "https://petcarebackend-wzcq.onrender.com/api",
 });
 
 api.interceptors.request.use((config) => {

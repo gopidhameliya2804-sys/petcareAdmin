@@ -23,7 +23,7 @@ function Login() {
 
   const addUser = async (user) => {
     let response = await axios.post(
-      `${import.meta.env.VITE_API_URL}/auth/signin`,
+      "https://petcarebackend-wzcq.onrender.com/api/auth/signin",
       user,
     );
     return response.data;
